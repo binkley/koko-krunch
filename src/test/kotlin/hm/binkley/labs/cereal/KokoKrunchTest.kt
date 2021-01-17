@@ -2,6 +2,7 @@ package hm.binkley.labs.cereal
 
 import org.junit.jupiter.api.Test
 import java.math.BigInteger.TWO
+import kotlin.reflect.full.memberProperties
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
@@ -62,9 +63,9 @@ internal class KokoKrunchTest {
 
     @Test
     fun `should complain about wrong field count for class`() {
+        val count = Cereal::class.memberProperties.size
         val bytes = written.write().apply {
-            // Keep track of field count, presently:
-            this[indexOf(9.toByte())] = 8.toByte()
+            this[indexOf(count.toByte())] = (count - 1).toByte()
         }
 
         assertFailsWith<AssertionError> {
