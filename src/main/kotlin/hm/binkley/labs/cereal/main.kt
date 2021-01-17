@@ -94,3 +94,10 @@ private fun ByteArray.dump() {
 
     println("INSTANCE -> $instance")
 }
+
+private data class Cereal(
+    val string: String,
+    val int: Int,
+    val byte: Byte,
+    val d: Double?,
+)
