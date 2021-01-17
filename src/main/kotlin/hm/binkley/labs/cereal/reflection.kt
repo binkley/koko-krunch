@@ -8,6 +8,10 @@ private val unsafe = Unsafe::class.java.getDeclaredField("theUnsafe").apply {
     isAccessible = true
 }.get(null) as Unsafe
 
+/**
+ * @todo This breaks singleton identity contracts, such as Kotlin `object`
+ *       and enums
+ */
 @Suppress("UNCHECKED_CAST")
 internal fun <T> Class<T>.newBlankInstance(): T =
     unsafe.allocateInstance(this) as T
@@ -28,13 +32,6 @@ internal val Class<*>.serializedFields: List<Field>
         }
 
         return fields.onEach { it.isAccessible = true }
-    }
-
-internal val Class<*>.serializedFieldsX
-    get() = declaredFields.filterNot {
-        it.isStatic || it.isTransient
-    }.onEach {
-        it.isAccessible = true
     }
 
 internal fun Class<*>.getSerializedField(name: String): Field {

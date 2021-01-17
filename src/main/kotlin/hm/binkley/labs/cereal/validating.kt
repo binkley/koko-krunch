@@ -23,6 +23,9 @@ internal fun ByteBuffer.assertSentinel() = get().also {
 internal fun <T> ByteBuffer.assertClassName(expectedClass: Class<T>) {
     val expectedClassName = expectedClass.name
     val actualClassName = readString()
+
+    if (DEBUG) println("CLASS NAME -> $actualClassName")
+
     assert(expectedClassName == actualClassName) {
         "TODO: Supertype and interfaces for target expected class: expected $expectedClassName; got $actualClassName"
     }

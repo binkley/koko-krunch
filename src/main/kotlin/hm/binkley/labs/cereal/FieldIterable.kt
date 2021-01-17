@@ -20,12 +20,16 @@ private class FieldIterable<T>(
         override fun hasNext() = fieldCount != n
         override fun next() = clazz.readFrom(buf) { nextField(it) }.also {
             ++n
+
+            if (DEBUG) println("FIELD #$n -> ${it.first} -> ${it.second}")
         }
     }
 }
 
 private fun <T> ByteBuffer.fieldCount(expectedClass: Class<T>) =
     readInt().also {
+        if (DEBUG) println("FIELD COUNT -> $it")
+
         assertFieldCount(expectedClass, it)
     }
 
@@ -67,7 +71,11 @@ private fun ByteBuffer.readValue(
         String(it)
     }
     else -> ByteArray(len).let {
+        if (DEBUG) println("--START FIELD NESTED TYPE")
+
         get(it)
-        it.read(Class.forName(typeName))
+        it.read(Class.forName(typeName)).also {
+            if (DEBUG) println("--END FIELD NESTED TYPE ($typeName)")
+        }
     }
 }
