@@ -61,6 +61,7 @@ private fun ByteBuffer.readValue(
     Float::class.java.name -> float
     Int::class.java.name -> int
     Long::class.java.name -> long
+    Short::class.java.name -> short
     String::class.java.name -> ByteArray(len).let {
         get(it)
         String(it)

@@ -1,16 +1,18 @@
 package hm.binkley.labs.cereal
 
 import org.junit.jupiter.api.Test
-import java.math.BigInteger
 import java.math.BigInteger.TWO
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-private val written = TestFoo(
-    bint = TWO.pow(1_234),
+private val written = Cereal(
+    bint = TWO.pow(Long.SIZE_BITS + 1),
     bool = true,
     byte = 3.toByte(),
+    ch = 'A',
     d = null,
+    f = 1.234f,
+    s = 1024.toShort(),
     text = "BOB",
     z = 13,
 )
@@ -20,7 +22,7 @@ internal class KokoKrunchTest {
     fun `should round trip`() {
         val bytes = written.write()
 
-        val read = bytes.read<TestFoo>()
+        val read = bytes.read<Cereal>()
 
         assertEquals(written, read)
     }
@@ -32,18 +34,18 @@ internal class KokoKrunchTest {
         }
 
         assertFailsWith<AssertionError> {
-            bytes.read<TestFoo>()
+            bytes.read<Cereal>()
         }
     }
 
     @Test
     fun `should complain about wrong class type`() {
         val bytes = written.write().apply {
-            this[indexOf('F'.toByte())] = 'G'.toByte()
+            this[indexOf('C'.toByte())] = 'D'.toByte()
         }
 
         assertFailsWith<AssertionError> {
-            bytes.read<TestFoo>()
+            bytes.read<Cereal>()
         }
     }
 
@@ -54,7 +56,7 @@ internal class KokoKrunchTest {
         }
 
         assertFailsWith<AssertionError> {
-            bytes.read<TestFoo>()
+            bytes.read<Cereal>()
         }
     }
 
@@ -62,11 +64,11 @@ internal class KokoKrunchTest {
     fun `should complain about wrong field count for class`() {
         val bytes = written.write().apply {
             // Keep track of field count, presently:
-            this[indexOf(6.toByte())] = 5.toByte()
+            this[indexOf(9.toByte())] = 8.toByte()
         }
 
         assertFailsWith<AssertionError> {
-            bytes.read<TestFoo>()
+            bytes.read<Cereal>()
         }
     }
 
@@ -80,7 +82,7 @@ internal class KokoKrunchTest {
         }
 
         assertFailsWith<AssertionError> {
-            bytes.read<TestFoo>()
+            bytes.read<Cereal>()
         }
     }
 
@@ -91,7 +93,7 @@ internal class KokoKrunchTest {
         }
 
         assertFailsWith<AssertionError> {
-            bytes.read<TestFoo>()
+            bytes.read<Cereal>()
         }
     }
 
@@ -102,16 +104,7 @@ internal class KokoKrunchTest {
         }
 
         assertFailsWith<AssertionError> {
-            bytes.read<TestFoo>()
+            bytes.read<Cereal>()
         }
     }
 }
-
-private data class TestFoo(
-    val bint: BigInteger,
-    val text: String,
-    val byte: Byte,
-    val bool: Boolean,
-    val d: Double?,
-    val z: Int,
-)

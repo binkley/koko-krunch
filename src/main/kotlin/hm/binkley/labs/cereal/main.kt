@@ -1,14 +1,20 @@
 package hm.binkley.labs.cereal
 
 import sun.misc.Unsafe
+import java.math.BigInteger
 import java.nio.ByteBuffer
 
 fun main() {
     val cereal = Cereal(
-        byte = 0b01010101,
+        bint = BigInteger.TWO.pow(Long.SIZE_BITS + 1),
+        bool = true,
+        byte = 3.toByte(),
+        ch = 'A',
         d = null,
-        int = 3,
-        string = "THREE",
+        f = 1.234f,
+        s = 1024.toShort(),
+        text = "BOB",
+        z = 13,
     )
     val bytes = cereal.write()
 
@@ -94,10 +100,3 @@ private fun ByteArray.dump() {
 
     println("INSTANCE -> $instance")
 }
-
-private data class Cereal(
-    val string: String,
-    val int: Int,
-    val byte: Byte,
-    val d: Double?,
-)
