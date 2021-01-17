@@ -30,5 +30,7 @@ internal fun <T> T?.study(): Prep = when (this) {
     is String -> with(encodeToByteArray()) {
         size to { it.put(this) }
     }
-    else -> TODO("Other types? Recursion for embedded objs: $this")
+    else -> with(write()) {
+        size to { it.put(this) }
+    }
 }

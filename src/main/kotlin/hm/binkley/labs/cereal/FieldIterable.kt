@@ -49,7 +49,7 @@ private fun <T> ByteBuffer.readField(clazz: Class<T>) =
 private fun ByteBuffer.readValue(
     field: Field,
     len: Int,
-) = when (field.type.name) {
+) = when (val typeName = field.type.name) {
     BigInteger::class.java.name -> ByteArray(len).let {
         get(it)
         BigInteger(it)
@@ -66,5 +66,8 @@ private fun ByteBuffer.readValue(
         get(it)
         String(it)
     }
-    else -> TODO("All the rest")
+    else -> ByteArray(len).let {
+        get(it)
+        it.read(Class.forName(typeName))
+    }
 }

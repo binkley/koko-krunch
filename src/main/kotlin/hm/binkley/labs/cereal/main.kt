@@ -23,6 +23,14 @@ fun main() {
     println("READ -> ${bytes.read<Cereal>()}")
 }
 
+private tailrec fun Class<*>?.dump() {
+    if (null == this) return
+    if (this == java.lang.Object::class.java) return
+    println(this)
+    serializedFields.forEach { println(it) }
+    return superclass.dump()
+}
+
 private fun ByteArray.dump() {
     val unsafe = Unsafe::class.java.getDeclaredField("theUnsafe").apply {
         isAccessible = true
