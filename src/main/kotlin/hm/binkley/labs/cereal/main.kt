@@ -1,5 +1,6 @@
 package hm.binkley.labs.cereal
 
+import hm.binkley.labs.cereal.Crunchiness.MEDIUM
 import sun.misc.Unsafe
 import java.math.BigInteger
 import java.nio.ByteBuffer
@@ -10,6 +11,7 @@ fun main() {
         bool = true,
         byte = 3.toByte(),
         ch = 'A',
+        crunch = Crunch(MEDIUM),
         d = null,
         f = 1.234f,
         s = 1024.toShort(),

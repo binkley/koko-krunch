@@ -1,5 +1,6 @@
 package hm.binkley.labs.cereal
 
+import hm.binkley.labs.cereal.Crunchiness.MEDIUM
 import org.junit.jupiter.api.Test
 import java.math.BigInteger.TWO
 import kotlin.reflect.full.memberProperties
@@ -11,6 +12,7 @@ private val written = Cereal(
     bool = true,
     byte = 3.toByte(),
     ch = 'A',
+    crunch = Crunch(MEDIUM),
     d = null,
     f = 1.234f,
     s = 1024.toShort(),

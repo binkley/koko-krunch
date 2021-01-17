@@ -16,6 +16,9 @@ internal open class Chocolate(val beans: Int) {
     }
 }
 
+internal enum class Crunchiness { LOW, MEDIUM, HIGH }
+internal data class Crunch(val level: Crunchiness)
+
 internal class Cereal(
     val bint: BigInteger,
     val text: String,
@@ -26,6 +29,7 @@ internal class Cereal(
     val d: Double?,
     val f: Float,
     val z: Int,
+    val crunch: Crunch,
     beans: Int,
 ) : Chocolate(beans) {
     override fun equals(other: Any?): Boolean = this === other ||
@@ -40,11 +44,13 @@ internal class Cereal(
             bool == other.bool &&
             d == other.d &&
             f == other.f &&
-            z == other.z
+            z == other.z &&
+            crunch == other.crunch
 
-    override fun hashCode() = hash(bint, text, byte, s, ch, bool, d, f, z)
+    override fun hashCode() =
+        hash(bint, text, byte, s, ch, bool, d, f, z, crunch)
 
     override fun toString(): String {
-        return "Cereal(bint=$bint, text='$text', byte=$byte, s=$s, ch=$ch, bool=$bool, d=$d, f=$f, z=$z, beans=$beans)"
+        return "Cereal(bint=$bint, text='$text', byte=$byte, s=$s, ch=$ch, bool=$bool, d=$d, f=$f, z=$z, crunch=$crunch, beans=$beans)"
     }
 }
