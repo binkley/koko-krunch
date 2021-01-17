@@ -15,18 +15,40 @@ internal fun <T> Class<T>.newBlankInstance(): T =
 private val Field.isStatic get() = Modifier.isStatic(modifiers)
 private val Field.isTransient get() = Modifier.isTransient(modifiers)
 
-internal val <T> Class<T>.serializedFields
+internal val Class<*>.serializedFields: List<Field>
+    get() {
+        val fields = mutableListOf<Field>()
+        var clazz: Class<*>? = this
+        while (null != clazz && java.lang.Object::class.java != clazz) {
+            fields += clazz.declaredFields.filterNot {
+                it.isStatic || it.isTransient
+            }
+
+            clazz = clazz.superclass
+        }
+
+        return fields.onEach { it.isAccessible = true }
+    }
+
+internal val Class<*>.serializedFieldsX
     get() = declaredFields.filterNot {
         it.isStatic || it.isTransient
     }.onEach {
         it.isAccessible = true
     }
 
-/** @todo Non-grossly move assertion to `validating.kt` */
-internal fun <T> Class<T>.getSerializedField(name: String) = try {
-    getDeclaredField(name).apply {
-        isAccessible = true
+internal fun Class<*>.getSerializedField(name: String): Field {
+    var clazz: Class<*>? = this
+    while (null != clazz && java.lang.Object::class.java != clazz) return try {
+        val field = clazz.getDeclaredField(name)
+        if (field.isStatic || field.isTransient) continue
+        field.isAccessible = true
+        field
+    } catch (e: NoSuchFieldException) {
+        continue
+    } finally {
+        clazz = clazz.superclass
     }
-} catch (e: NoSuchFieldException) {
+
     throw AssertionError("Bad field name: $name")
 }

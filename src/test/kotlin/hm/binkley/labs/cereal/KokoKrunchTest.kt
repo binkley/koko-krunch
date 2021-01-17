@@ -16,6 +16,7 @@ private val written = Cereal(
     s = 1024.toShort(),
     text = "BOB",
     z = 13,
+    beans = 20,
 )
 
 internal class KokoKrunchTest {

@@ -5,7 +5,6 @@ import java.nio.ByteBuffer
 
 inline fun <reified T> ByteArray.read(): T = read(T::class.java)
 
-/** @todo Freeze/thaw supertype fields */
 fun <T> ByteArray.read(clazz: Class<T>): T =
     toByteBuffer().assertEnoughData(clazz) {
         val instance = clazz.readFrom(this) { blankInstance(it) }
