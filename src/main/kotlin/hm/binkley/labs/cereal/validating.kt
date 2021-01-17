@@ -27,7 +27,7 @@ internal fun <T> ByteBuffer.assertClassName(expectedClass: Class<T>) {
     if (DEBUG) println("CLASS NAME -> $actualClassName")
 
     assert(expectedClassName == actualClassName) {
-        "TODO: Supertype and interfaces for target expected class: expected $expectedClassName; got $actualClassName"
+        "Wrong class: expected $expectedClassName; got $actualClassName"
     }
 }
 

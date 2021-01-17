@@ -53,29 +53,33 @@ private fun <T> ByteBuffer.readField(clazz: Class<T>) =
 private fun ByteBuffer.readValue(
     field: Field,
     len: Int,
-) = when (val typeName = field.type.name) {
-    BigInteger::class.java.name -> ByteArray(len).let {
-        get(it)
-        BigInteger(it)
-    }
-    Boolean::class.java.name -> 0.toByte() != get()
-    Byte::class.java.name -> get()
-    Char::class.java.name -> char
-    Double::class.java.name -> double
-    Float::class.java.name -> float
-    Int::class.java.name -> int
-    Long::class.java.name -> long
-    Short::class.java.name -> short
-    String::class.java.name -> ByteArray(len).let {
-        get(it)
-        String(it)
-    }
-    else -> ByteArray(len).let {
-        if (DEBUG) println("--START FIELD NESTED TYPE")
+): Any? {
+    return if (field.type.isEnum) {
+        field.type.enumConstants[int]
+    } else when (val typeName = field.type.name) {
+        BigInteger::class.java.name -> ByteArray(len).let {
+            get(it)
+            BigInteger(it)
+        }
+        Boolean::class.java.name -> 0.toByte() != get()
+        Byte::class.java.name -> get()
+        Char::class.java.name -> char
+        Double::class.java.name -> double
+        Float::class.java.name -> float
+        Int::class.java.name -> int
+        Long::class.java.name -> long
+        Short::class.java.name -> short
+        String::class.java.name -> ByteArray(len).let {
+            get(it)
+            String(it)
+        }
+        else -> ByteArray(len).let {
+            if (DEBUG) println("--START FIELD NESTED TYPE")
 
-        get(it)
-        it.read(Class.forName(typeName)).also {
-            if (DEBUG) println("--END FIELD NESTED TYPE ($typeName)")
+            get(it)
+            it.read(Class.forName(typeName)).also {
+                if (DEBUG) println("--END FIELD NESTED TYPE ($typeName)")
+            }
         }
     }
 }

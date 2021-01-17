@@ -4,16 +4,14 @@ import java.math.BigInteger
 import java.util.Objects.hash
 
 internal open class Chocolate(val beans: Int) {
-    override fun equals(other: Any?): Boolean = this === other ||
+    override fun equals(other: Any?) = this === other ||
             other is Chocolate &&
             javaClass == other.javaClass &&
             beans == other.beans
 
     override fun hashCode() = hash(beans)
 
-    override fun toString(): String {
-        return "Chocolate(beans=$beans)"
-    }
+    override fun toString() = "Chocolate(beans=$beans)"
 }
 
 internal enum class Crunchiness { LOW, MEDIUM, HIGH }
@@ -32,7 +30,7 @@ internal class Cereal(
     val crunch: Crunch,
     beans: Int,
 ) : Chocolate(beans) {
-    override fun equals(other: Any?): Boolean = this === other ||
+    override fun equals(other: Any?) = this === other ||
             other is Cereal &&
             javaClass == other.javaClass &&
             beans == other.beans &&
@@ -50,7 +48,6 @@ internal class Cereal(
     override fun hashCode() =
         hash(bint, text, byte, s, ch, bool, d, f, z, crunch)
 
-    override fun toString(): String {
-        return "Cereal(bint=$bint, text='$text', byte=$byte, s=$s, ch=$ch, bool=$bool, d=$d, f=$f, z=$z, crunch=$crunch, beans=$beans)"
-    }
+    override fun toString() =
+        "Cereal(bint=$bint, text='$text', byte=$byte, s=$s, ch=$ch, bool=$bool, d=$d, f=$f, z=$z, crunch=$crunch, super=${super.toString()})"
 }

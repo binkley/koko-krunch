@@ -23,6 +23,7 @@ internal fun <T> T?.study(): Prep = when (this) {
     is Byte -> Byte.SIZE_BYTES to { it.put(this) }
     is Char -> Char.SIZE_BYTES to { it.putChar(this) }
     is Double -> Double.SIZE_BYTES to { it.putDouble(this) }
+    is Enum<*> -> Int.SIZE_BYTES to { it.putInt(ordinal) }
     is Float -> Float.SIZE_BYTES to { it.putFloat(this) }
     is Int -> Int.SIZE_BYTES to { it.putInt(this) }
     is Long -> Long.SIZE_BYTES to { it.putLong(this) }

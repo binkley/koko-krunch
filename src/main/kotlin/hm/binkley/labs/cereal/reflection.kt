@@ -8,10 +8,7 @@ private val unsafe = Unsafe::class.java.getDeclaredField("theUnsafe").apply {
     isAccessible = true
 }.get(null) as Unsafe
 
-/**
- * @todo This breaks singleton identity contracts, such as Kotlin `object`
- *       and enums
- */
+/** @todo This breaks singleton identity contracts, such as Kotlin `object` */
 @Suppress("UNCHECKED_CAST")
 internal fun <T> Class<T>.newBlankInstance(): T =
     unsafe.allocateInstance(this) as T
