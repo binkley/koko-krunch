@@ -7,6 +7,8 @@ internal fun Iterable<Prep>.newBuffer() =
 
 internal fun ByteArray.toByteBuffer() = ByteBuffer.wrap(this)
 
+internal val ByteBuffer.byte get() = get()
+
 /** @todo Syntactic sugar causes cancer of the semicolon */
 internal fun <T, R> Class<T>.readFrom(
     buf: ByteBuffer,

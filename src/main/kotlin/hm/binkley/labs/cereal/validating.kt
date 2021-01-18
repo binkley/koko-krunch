@@ -14,7 +14,7 @@ internal fun <T> ByteBuffer.assertEnoughData(
     throw AssertionError("Missing bytes: possibly truncated or corrupted, or class version changed")
 }
 
-internal fun ByteBuffer.assertSentinel() = get().also {
+internal fun ByteBuffer.assertSentinel() = byte.also {
     assert(0.toByte() == it) {
         "Corrupted sentinel byte: ${it.pretty()} @ ${position() - 1}"
     }

@@ -61,8 +61,8 @@ private fun ByteBuffer.readValue(
             get(it)
             BigInteger(it)
         }
-        Boolean::class.java.name -> 0.toByte() != get()
-        Byte::class.java.name -> get()
+        Boolean::class.java.name -> 0.toByte() != byte
+        Byte::class.java.name -> byte
         Char::class.java.name -> char
         Double::class.java.name -> double
         Float::class.java.name -> float
