@@ -1,11 +1,11 @@
 package hm.binkley.labs.cereal
 
 import hm.binkley.labs.cereal.Crunchiness.MEDIUM
+import io.kotest.assertions.throwables.shouldThrowExactly
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import java.math.BigInteger.TWO
 import kotlin.reflect.full.memberProperties
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 
 private val written = Cereal(
     bint = TWO.pow(Long.SIZE_BITS + 1),
@@ -28,7 +28,7 @@ internal class KokoKrunchTest {
 
         val read = bytes.read<Cereal>()
 
-        assertEquals(written, read)
+        read shouldBe written
     }
 
     @Test
@@ -37,7 +37,7 @@ internal class KokoKrunchTest {
             this[size - 1] = 1.toByte()
         }
 
-        assertFailsWith<AssertionError> {
+        shouldThrowExactly<AssertionError> {
             bytes.read<Cereal>()
         }
     }
@@ -48,7 +48,7 @@ internal class KokoKrunchTest {
             this[indexOf('C'.toByte())] = 'D'.toByte()
         }
 
-        assertFailsWith<AssertionError> {
+        shouldThrowExactly<AssertionError> {
             bytes.read<Cereal>()
         }
     }
@@ -59,7 +59,7 @@ internal class KokoKrunchTest {
             this[indexOf(4.toByte())] = 3.toByte()
         }
 
-        assertFailsWith<AssertionError> {
+        shouldThrowExactly<AssertionError> {
             bytes.read<Cereal>()
         }
     }
@@ -71,7 +71,7 @@ internal class KokoKrunchTest {
             this[indexOf(count.toByte())] = (count - 1).toByte()
         }
 
-        assertFailsWith<AssertionError> {
+        shouldThrowExactly<AssertionError> {
             bytes.read<Cereal>()
         }
     }
@@ -85,7 +85,7 @@ internal class KokoKrunchTest {
             truncated
         }
 
-        assertFailsWith<AssertionError> {
+        shouldThrowExactly<AssertionError> {
             bytes.read<Cereal>()
         }
     }
@@ -96,7 +96,7 @@ internal class KokoKrunchTest {
             this[indexOf('y'.toByte())] = 'z'.toByte()
         }
 
-        assertFailsWith<AssertionError> {
+        shouldThrowExactly<AssertionError> {
             bytes.read<Cereal>()
         }
     }
@@ -107,7 +107,7 @@ internal class KokoKrunchTest {
             copyOf(size + 1)
         }
 
-        assertFailsWith<AssertionError> {
+        shouldThrowExactly<AssertionError> {
             bytes.read<Cereal>()
         }
     }
