@@ -51,6 +51,7 @@ internal fun ByteBuffer.assertFieldTypeName(field: Field) {
     val expectedFieldTypeName = field.type.name
     val actualFieldTypeName = readString()
     assert(expectedFieldTypeName == actualFieldTypeName) {
+        // TODO: Why are expected/actual flipped?
         "Field type changed between class versions: expected $expectedFieldTypeName; got $actualFieldTypeName"
     }
 }

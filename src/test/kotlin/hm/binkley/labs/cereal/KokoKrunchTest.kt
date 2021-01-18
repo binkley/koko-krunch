@@ -8,17 +8,20 @@ import java.math.BigInteger.TWO
 import kotlin.reflect.full.memberProperties
 
 private val written = Cereal(
+    beans = 20,
     bint = TWO.pow(Long.SIZE_BITS + 1),
     bool = true,
     byte = 3.toByte(),
     ch = 'A',
     crunch = Crunch(MEDIUM),
-    d = null,
+    d = 3.14159,
+    drool = false,
     f = 1.234f,
+    long = 9_876_543_210,
+    optional = null,
+    required = "BOB",
     s = 1024.toShort(),
-    text = "BOB",
     z = 13,
-    beans = 20,
 )
 
 internal class KokoKrunchTest {
@@ -65,8 +68,9 @@ internal class KokoKrunchTest {
     }
 
     @Test
-    fun `should complain about wrong field count for class`() {
-        val count = Cereal::class.memberProperties.size
+    fun `should complain about wrong field count`() {
+        // Subtract 1 to ignore the transient field
+        val count = Cereal::class.memberProperties.size - 1
         val bytes = written.write().apply {
             this[indexOf(count.toByte())] = (count - 1).toByte()
         }
@@ -93,7 +97,33 @@ internal class KokoKrunchTest {
     @Test
     fun `should complain about wrong field type`() {
         val bytes = written.write().apply {
-            this[indexOf('y'.toByte())] = 'z'.toByte()
+            val i = withIndex().find {
+                'b'.toByte() == it.value &&
+                        'y'.toByte() == this[it.index + 1] &&
+                        't'.toByte() == this[it.index + 2] &&
+                        'e'.toByte() == this[it.index + 3]
+            }!!.index
+            this[i] = 'l'.toByte()
+            this[i + 1] = 'o'.toByte()
+            this[i + 2] = 'n'.toByte()
+            this[i + 3] = 'g'.toByte()
+        }
+
+        shouldThrowExactly<AssertionError> {
+            bytes.read<Cereal>()
+        }
+    }
+
+    @Test
+    fun `should complain about bad field type`() {
+        val bytes = written.write().apply {
+            val i = withIndex().find {
+                'b'.toByte() == it.value &&
+                        'y'.toByte() == this[it.index + 1] &&
+                        't'.toByte() == this[it.index + 2] &&
+                        'e'.toByte() == this[it.index + 3]
+            }!!.index
+            this[i + 1] = 'z'.toByte()
         }
 
         shouldThrowExactly<AssertionError> {

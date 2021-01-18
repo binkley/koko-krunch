@@ -1,23 +1,24 @@
 package hm.binkley.labs.cereal
 
 import hm.binkley.labs.cereal.Crunchiness.MEDIUM
-import sun.misc.Unsafe
 import java.math.BigInteger
-import java.nio.ByteBuffer
 
 fun main() {
     val cereal = Cereal(
+        beans = 20,
         bint = BigInteger.TWO.pow(Long.SIZE_BITS + 1),
         bool = true,
         byte = 3.toByte(),
         ch = 'A',
         crunch = Crunch(MEDIUM),
-        d = null,
+        d = 3.14159,
+        drool = false,
         f = 1.234f,
+        long = 9_876_543_210,
+        optional = null,
+        required = "BOB",
         s = 1024.toShort(),
-        text = "BOB",
         z = 13,
-        beans = 20,
     )
     val bytes = cereal.write()
 
