@@ -5,6 +5,10 @@ import java.nio.ByteBuffer
 
 inline fun <reified T> ByteArray.read(): T = read(T::class.java)
 
+/**
+ * Read in an instance of [clazz] from a byte array following the rules in
+ * [write].
+ */
 fun <T> ByteArray.read(clazz: Class<T>): T =
     toByteBuffer().assertEnoughData(clazz) {
         val instance = clazz.readFrom(this) { blankInstance(it) }
@@ -18,21 +22,26 @@ fun <T> ByteArray.read(clazz: Class<T>): T =
     }
 
 /**
- * Write out byte array representing a serialized object:
- * - Each record has 3 parts:
- *   1. Byte count of the value payload
- *   2. The value payload in bytes
- *   3. A terminating sentinel 0 byte
- * - The complete byte array has an additional terminating sentinel 0 byte
- * - First record is the object class name
- * - Second record is a count of serialized fields
- * - Following records are for each non-static, non-transient field, sorted by
- *   field name alphabetically, each field contributing 3 more records:
+ * Write out byte array representing a serialized object as a sequence of
+ * records:
+ * - Each record has 3 parts in the order of:
+ *   1. A byte count of the serialized value
+ *   2. The serialized value as bytes
+ *   3. A terminating sentinel byte with value 0
+ * - The complete serialization has an additional terminating sentinel byte
+ *   with value 0
+ * - The object class name is the first record
+ * - An `int` count of serialized fields is the second record
+ * - Each non-static, non-transient field, sorted alphabetically by
+ *   field name, are the remaining records with each field contributing 3
+ *   records each:
  *   1. The field name
- *   2. The field type
- *   3. The field value for the serialized object if primitive or non-null
+ *   2. The field type name
+ *   3. The serialized field value if primitive or non-null
  * - If the field value is `null`, use -1 as the value payload byte count, and
  *   do not write a value
+ * - If the field value is non-primitive, the third record is the serialized
+ *   object recursively following these rules
  */
 fun Any.write(): ByteArray {
     val preps = classAndFieldPreps()
