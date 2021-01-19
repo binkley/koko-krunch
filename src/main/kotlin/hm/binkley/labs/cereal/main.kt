@@ -1,12 +1,12 @@
 package hm.binkley.labs.cereal
 
 import hm.binkley.labs.cereal.Crunchiness.MEDIUM
-import java.math.BigInteger
+import java.math.BigInteger.TWO
 
 fun main() {
     val cereal = Cereal(
         beans = 20,
-        bint = BigInteger.TWO.pow(Long.SIZE_BITS + 1),
+        bint = TWO.pow(Long.SIZE_BITS + 1),
         bool = true,
         byte = 3.toByte(),
         ch = 'A',
@@ -23,6 +23,6 @@ fun main() {
     val bytes = cereal.write()
 
     println("WRITE -> $cereal")
-    println("BYTES -> ${bytes.pretty()}")
+    println("BYTES (len=${bytes.size}) -> ${bytes.pretty()}")
     println("READ -> ${bytes.read<Cereal>()}")
 }
