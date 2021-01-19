@@ -14,11 +14,9 @@ internal fun Prep.writeTo(buf: ByteBuffer) = buf.apply {
     put(0)
 }
 
-internal fun <T> T?.study(): Prep = when (this) {
+internal fun Any?.study(): Prep = when (this) {
     null -> -1 to { it }
-    is BigInteger -> with(toByteArray()) {
-        size to { it.put(this) }
-    }
+    is BigInteger -> with(toByteArray()) { size to { it.put(this) } }
     is Boolean -> Byte.SIZE_BYTES to { it.put(if (this) 1 else 0) }
     is Byte -> Byte.SIZE_BYTES to { it.put(this) }
     is Char -> Char.SIZE_BYTES to { it.putChar(this) }
@@ -28,10 +26,6 @@ internal fun <T> T?.study(): Prep = when (this) {
     is Int -> Int.SIZE_BYTES to { it.putInt(this) }
     is Long -> Long.SIZE_BYTES to { it.putLong(this) }
     is Short -> Short.SIZE_BYTES to { it.putShort(this) }
-    is String -> with(encodeToByteArray()) {
-        size to { it.put(this) }
-    }
-    else -> with(write()) {
-        size to { it.put(this) }
-    }
+    is String -> with(encodeToByteArray()) { size to { it.put(this) } }
+    else -> with(write()) { size to { it.put(this) } }
 }

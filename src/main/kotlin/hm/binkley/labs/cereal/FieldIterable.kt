@@ -34,7 +34,7 @@ private fun <T> ByteBuffer.fieldCount(expectedClass: Class<T>) =
 private fun <T> ByteBuffer.nextField(clazz: Class<T>): Pair<Field, Any?> {
     val field = readField(clazz)
     val len = int
-    val value = if (-1 == len) null else readValue(field, len)
+    val value = readValue(field, len)
 
     assertSentinel()
 
@@ -51,10 +51,10 @@ private fun <T> ByteBuffer.readField(clazz: Class<T>) =
 private fun ByteBuffer.readValue(
     field: Field,
     len: Int,
-): Any? {
-    return if (field.type.isEnum) {
-        field.type.enumConstants[int]
-    } else when (val typeName = field.type.name) {
+) = when {
+    -1 == len -> null
+    field.type.isEnum -> field.type.enumConstants[int]
+    else -> when (val typeName = field.type.name) {
         BigInteger::class.java.name -> buf(len) { BigInteger(it) }
         Boolean::class.java.name -> 0.toByte() != byte
         Byte::class.java.name -> byte
