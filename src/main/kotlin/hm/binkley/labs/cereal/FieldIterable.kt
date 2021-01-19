@@ -4,8 +4,8 @@ import java.lang.reflect.Field
 import java.math.BigInteger
 import java.nio.ByteBuffer
 
-internal fun <T> ByteBuffer.fields(clazz: Class<T>)
-        : Iterable<Pair<Field, Any?>> = FieldIterable(this, clazz)
+internal fun <T> ByteBuffer.fields(clazz: Class<T>):
+    Iterable<Pair<Field, Any?>> = FieldIterable(this, clazz)
 
 private class FieldIterable<T>(
     private val buf: ByteBuffer,

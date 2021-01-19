@@ -99,9 +99,9 @@ internal class KokoKrunchTest {
         val bytes = written.write().apply {
             val i = withIndex().find {
                 'b'.toByte() == it.value &&
-                        'y'.toByte() == this[it.index + 1] &&
-                        't'.toByte() == this[it.index + 2] &&
-                        'e'.toByte() == this[it.index + 3]
+                    'y'.toByte() == this[it.index + 1] &&
+                    't'.toByte() == this[it.index + 2] &&
+                    'e'.toByte() == this[it.index + 3]
             }!!.index
             this[i] = 'l'.toByte()
             this[i + 1] = 'o'.toByte()
@@ -119,9 +119,9 @@ internal class KokoKrunchTest {
         val bytes = written.write().apply {
             val i = withIndex().find {
                 'b'.toByte() == it.value &&
-                        'y'.toByte() == this[it.index + 1] &&
-                        't'.toByte() == this[it.index + 2] &&
-                        'e'.toByte() == this[it.index + 3]
+                    'y'.toByte() == this[it.index + 1] &&
+                    't'.toByte() == this[it.index + 2] &&
+                    'e'.toByte() == this[it.index + 3]
             }!!.index
             this[i + 1] = 'z'.toByte()
         }

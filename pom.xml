@@ -22,6 +22,8 @@
     <properties>
         <!-- @formatter:off -->
         <buildplan-maven-plugin.version>1.4</buildplan-maven-plugin.version>
+        <dependency-check-maven.version>6.0.5</dependency-check-maven.version>
+        <detekt-maven-plugin.version>1.15.0.1</detekt-maven-plugin.version>
         <failIfNoTests>true</failIfNoTests>
         <failsafe.printSummary>false</failsafe.printSummary>
         <generateBackupPoms>false</generateBackupPoms>
@@ -31,6 +33,7 @@
         <junit.version>5.7.0</junit.version>
         <kotest.version>4.4.0.RC2</kotest.version>
         <kotlin.version>1.4.21</kotlin.version>
+        <ktlint-maven-plugin.version>1.7.0</ktlint-maven-plugin.version>
         <lombok.version>1.18.16</lombok.version>
         <main.class>hm.binkley.labs.cereal.MainKt</main.class>
         <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
@@ -40,6 +43,7 @@
         <maven-help-plugin.version>3.2.0</maven-help-plugin.version>
         <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+        <owasp.skip>false</owasp.skip>
         <project.build.sourceEncoding>${java.charset}</project.build.sourceEncoding>
         <project.reporting.outputEncoding>${java.charset}</project.reporting.outputEncoding>
         <system-lambda.version>1.2.0</system-lambda.version>
@@ -271,6 +275,58 @@
                                 </rule>
                             </rules>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.gantsign.maven</groupId>
+                <artifactId>ktlint-maven-plugin</artifactId>
+                <version>${ktlint-maven-plugin.version}</version>
+                <configuration>
+                    <verbose>true</verbose>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>format</goal>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.ozsie</groupId>
+                <artifactId>detekt-maven-plugin</artifactId>
+                <version>${detekt-maven-plugin.version}</version>
+                <configuration>
+                    <config>config/detekt.yml</config>
+                    <report>
+                        <report>
+                            html:${basedir}/target/site/detekt/index.html
+                        </report>
+                    </report>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>${dependency-check-maven.version}</version>
+                <configuration>
+                    <skip>${owasp.skip}</skip>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
