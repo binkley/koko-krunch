@@ -1,10 +1,14 @@
 <a href="LICENSE.md">
-<img src="./images/public-domain.png" alt="Public Domain" align="right"/>
+<img src="./images/public-domain.png" alt="Public Domain" align="right" 
+width="5%"/>
 </a>
 
 # Koko Krunch
 
 Demonstration serialization with Kotlin and JDK reflection
+
+<img src="./images/koko-krunch.jpg" alt="Koko Krunch" align="right"
+width="20%"/>
 
 [![build](https://github.com/binkley/koko-krunch/workflows/build/badge.svg)](https://github.com/binkley/koko-krunch/actions)
 [![issues](https://img.shields.io/github/issues/binkley/koko-krunch.svg)](https://github.com/binkley/koko-krunch/issues/)
