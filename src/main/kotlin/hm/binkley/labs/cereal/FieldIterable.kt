@@ -18,18 +18,16 @@ private class FieldIterable<T>(
         private var n = 0
 
         override fun hasNext() = fieldCount != n
-        override fun next() = clazz.readFrom(buf) { nextField(it) }.also {
+        override fun next(): Pair<Field, Any?> {
+            val next = clazz.readFrom(buf) { nextField(it) }
             ++n
-
-            if (DEBUG) println("FIELD #$n -> ${it.first} -> ${it.second}")
+            return next
         }
     }
 }
 
 private fun <T> ByteBuffer.fieldCount(expectedClass: Class<T>) =
     readInt().also {
-        if (DEBUG) println("FIELD COUNT -> $it")
-
         assertFieldCount(expectedClass, it)
     }
 
@@ -57,10 +55,7 @@ private fun ByteBuffer.readValue(
     return if (field.type.isEnum) {
         field.type.enumConstants[int]
     } else when (val typeName = field.type.name) {
-        BigInteger::class.java.name -> ByteArray(len).let {
-            get(it)
-            BigInteger(it)
-        }
+        BigInteger::class.java.name -> buf(len) { BigInteger(it) }
         Boolean::class.java.name -> 0.toByte() != byte
         Byte::class.java.name -> byte
         Char::class.java.name -> char
@@ -69,17 +64,7 @@ private fun ByteBuffer.readValue(
         Int::class.java.name -> int
         Long::class.java.name -> long
         Short::class.java.name -> short
-        String::class.java.name -> ByteArray(len).let {
-            get(it)
-            String(it)
-        }
-        else -> ByteArray(len).let {
-            if (DEBUG) println("--START FIELD NESTED TYPE")
-
-            get(it)
-            it.read(Class.forName(typeName)).also {
-                if (DEBUG) println("--END FIELD NESTED TYPE ($typeName)")
-            }
-        }
+        String::class.java.name -> buf(len) { String(it) }
+        else -> buf(len) { it.read(Class.forName(typeName)) }
     }
 }

@@ -9,6 +9,12 @@ internal fun ByteArray.toByteBuffer() = ByteBuffer.wrap(this)
 
 internal val ByteBuffer.byte get() = get()
 
+internal fun <T> ByteBuffer.buf(len: Int, ctor: (ByteArray) -> T): T =
+    ByteArray(len).let {
+        get(it)
+        ctor(it)
+    }
+
 /** @todo Syntactic sugar causes cancer of the semicolon */
 internal fun <T, R> Class<T>.readFrom(
     buf: ByteBuffer,

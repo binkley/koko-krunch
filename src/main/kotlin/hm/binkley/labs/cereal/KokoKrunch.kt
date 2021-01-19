@@ -3,8 +3,6 @@ package hm.binkley.labs.cereal
 import java.lang.reflect.Field
 import java.nio.ByteBuffer
 
-internal const val DEBUG = false
-
 inline fun <reified T> ByteArray.read(): T = read(T::class.java)
 
 fun <T> ByteArray.read(clazz: Class<T>): T =

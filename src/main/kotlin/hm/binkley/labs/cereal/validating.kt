@@ -24,8 +24,6 @@ internal fun <T> ByteBuffer.assertClassName(expectedClass: Class<T>) {
     val expectedClassName = expectedClass.name
     val actualClassName = readString()
 
-    if (DEBUG) println("CLASS NAME -> $actualClassName")
-
     assert(expectedClassName == actualClassName) {
         "Wrong class: expected $expectedClassName; got $actualClassName"
     }
