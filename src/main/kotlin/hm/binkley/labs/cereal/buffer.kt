@@ -15,6 +15,35 @@ internal fun <T> ByteBuffer.buf(len: Int, ctor: (ByteArray) -> T): T =
         ctor(it)
     }
 
+internal fun ByteArray.indexOf(bytes: ByteArray): Int {
+    val len = size
+    val bLen = bytes.size
+    var i = 0
+
+    loop@ while (len - i >= bLen) {
+        var j = 0
+        while (j < bLen) {
+            if (this[i + j] != bytes[j]) {
+                ++i
+                continue@loop
+            }
+            ++j
+        }
+        return i
+    }
+
+    return -1
+}
+
+internal fun ByteArray.replaceAt(at: Int, bytes: ByteArray) {
+    val len = bytes.size
+    var i = 0
+    while (i < len) {
+        this[at + i] = bytes[i]
+        ++i
+    }
+}
+
 /** @todo Syntactic sugar causes cancer of the semicolon */
 internal fun <T, R> Class<T>.readFrom(
     buf: ByteBuffer,

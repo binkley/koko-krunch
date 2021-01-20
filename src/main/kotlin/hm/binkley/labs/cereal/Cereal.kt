@@ -20,7 +20,7 @@ internal open class Chocolate(val beans: Int) {
     }
 }
 
-internal enum class Crunchiness { LOW, MEDIUM, HIGH }
+internal enum class Crunchiness { MEDIUM }
 
 @Generated // Lie to JaCoCo
 internal data class Crunch(val level: Crunchiness)

@@ -1,5 +1,6 @@
 package hm.binkley.labs.cereal
 
+import lombok.Generated
 import java.lang.reflect.Field
 import java.nio.ByteBuffer
 
@@ -54,9 +55,7 @@ fun Any.write(): ByteArray {
 }
 
 private fun Any.classAndFieldPreps(): List<Prep> {
-    val fields = this::class.java.serializedFields.sortedWith { a, b ->
-        a.name.compareTo(b.name)
-    }
+    val fields = this::class.java.serializedFields.sortedBy { it.name }
 
     val classPreps = listOf(
         this::class.java.name,
@@ -75,16 +74,17 @@ private fun <T> ByteBuffer.blankInstance(expectedClass: Class<T>) =
         expectedClass.newBlankInstance()
     }
 
+@Generated // Lie to JaCoCo
 private data class FieldInfo(
     val name: String,
     val typeName: String,
     val value: Any?,
-) {
-    fun study() = listOf(
-        name,
-        typeName,
-        value
-    ).map { it.study() }
-}
+)
 
 private fun Field.info(o: Any) = FieldInfo(name, type.name, get(o))
+
+private fun FieldInfo.study() = listOf(
+    name,
+    typeName,
+    value
+).map { it.study() }

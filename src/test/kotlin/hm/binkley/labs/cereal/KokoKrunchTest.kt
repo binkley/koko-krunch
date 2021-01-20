@@ -95,18 +95,22 @@ internal class KokoKrunchTest {
     }
 
     @Test
+    fun `should complain about wrong field name`() {
+        val bytes = written.write().apply {
+            val i = indexOf("crunch".toByteArray())
+            replaceAt(i, "church".toByteArray())
+        }
+
+        shouldThrowExactly<AssertionError> {
+            bytes.read<Cereal>()
+        }
+    }
+
+    @Test
     fun `should complain about wrong field type`() {
         val bytes = written.write().apply {
-            val i = withIndex().find {
-                'b'.toByte() == it.value &&
-                    'y'.toByte() == this[it.index + 1] &&
-                    't'.toByte() == this[it.index + 2] &&
-                    'e'.toByte() == this[it.index + 3]
-            }!!.index
-            this[i] = 'l'.toByte()
-            this[i + 1] = 'o'.toByte()
-            this[i + 2] = 'n'.toByte()
-            this[i + 3] = 'g'.toByte()
+            val i = indexOf("byte".toByteArray())
+            replaceAt(i, "long".toByteArray())
         }
 
         shouldThrowExactly<AssertionError> {
@@ -117,12 +121,7 @@ internal class KokoKrunchTest {
     @Test
     fun `should complain about bad field type`() {
         val bytes = written.write().apply {
-            val i = withIndex().find {
-                'b'.toByte() == it.value &&
-                    'y'.toByte() == this[it.index + 1] &&
-                    't'.toByte() == this[it.index + 2] &&
-                    'e'.toByte() == this[it.index + 3]
-            }!!.index
+            val i = indexOf("byte".toByteArray())
             this[i + 1] = 'z'.toByte()
         }
 
