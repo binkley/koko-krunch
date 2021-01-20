@@ -14,10 +14,6 @@ width="20%"/>
 [![issues](https://img.shields.io/github/issues/binkley/koko-krunch.svg)](https://github.com/binkley/koko-krunch/issues/)
 [![Public Domain](https://img.shields.io/badge/license-Public%20Domain-blue.svg)](http://unlicense.org/)
 
-(This project covers mostly silly units: Metric is uninteresting except that
-being based on base-10, it is not representable by binary computers; the
-French revolutionaries overlooked that.)
-
 * [Build](#build)
 * [Reading](#reading)
 
