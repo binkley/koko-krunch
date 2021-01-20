@@ -83,7 +83,7 @@ internal class KokoKrunchTest {
     @Test
     fun `should complain about too few fields`() {
         val bytes = with(written.write()) {
-            // Last field, "z" is an Int
+            // Last field, "z" is an Int -- remove it
             val truncated = copyOf(size - Int.SIZE_BYTES - Int.SIZE_BYTES)
             truncated[truncated.size - 1] = 0.toByte()
             truncated
