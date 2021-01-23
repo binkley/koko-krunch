@@ -2,7 +2,11 @@ package hm.binkley.labs.cereal
 
 import lombok.Generated
 import java.math.BigInteger
+import java.time.Duration
+import java.time.Instant
+import java.time.LocalDateTime
 import java.util.Objects.hash
+import java.util.UUID
 
 @Generated // Lie to JaCoCo
 internal open class Chocolate(val beans: Int) {
@@ -40,6 +44,10 @@ internal class Cereal(
     val f: Float,
     val z: Int,
     val crunch: Crunch,
+    val uuid: UUID,
+    val now: Instant,
+    val `how long`: Duration,
+    val `when`: LocalDateTime,
     @Suppress("unused")
     @Transient
     val transient: Long = 0,
@@ -61,7 +69,11 @@ internal class Cereal(
         d == other.d &&
         f == other.f &&
         z == other.z &&
-        crunch == other.crunch
+        crunch == other.crunch &&
+        uuid == other.uuid &&
+        now == other.now &&
+        `how long` == other.`how long` &&
+        `when` == other.`when`
 
     override fun hashCode() =
         hash(
@@ -77,9 +89,13 @@ internal class Cereal(
             d,
             f,
             z,
-            crunch
+            crunch,
+            uuid,
+            now,
+            `how long`,
+            `when`,
         )
 
     override fun toString() =
-        "Cereal(bint=$bint, required='$required', optional='$optional', byte=${byte.pretty()}, s=$s, ch=$ch, long=$long, bool=$bool, drool=$drool, d=$d, f=$f, z=$z, crunch=$crunch, super=${super.toString()})"
+        "Cereal(bint=$bint, required='$required', optional='$optional', byte=${byte.pretty()}, s=$s, ch=$ch, long=$long, bool=$bool, drool=$drool, d=$d, f=$f, z=$z, crunch=$crunch, uuid=$uuid, now=$now, how long=${`how long`}, when=${`when`}, super=${super.toString()})"
 }
