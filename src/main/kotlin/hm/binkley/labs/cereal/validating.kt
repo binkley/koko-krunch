@@ -25,7 +25,7 @@ internal fun <T> ByteBuffer.assertClassName(expectedClass: Class<T>) {
     val actualClassName = readString()
 
     assert(expectedClassName == actualClassName) {
-        "Wrong class: expected $expectedClassName; got $actualClassName"
+        "Wrong class: expected '$expectedClassName'; got '$actualClassName'"
     }
 }
 
@@ -50,7 +50,7 @@ internal fun ByteBuffer.assertFieldTypeName(field: Field) {
     val actualFieldTypeName = readString()
     assert(expectedFieldTypeName == actualFieldTypeName) {
         // TODO: Why are expected/actual flipped?
-        "Field type changed between class versions: expected $expectedFieldTypeName; got $actualFieldTypeName"
+        "Field type changed between class versions: expected '$expectedFieldTypeName'; got '$actualFieldTypeName'"
     }
 }
 
