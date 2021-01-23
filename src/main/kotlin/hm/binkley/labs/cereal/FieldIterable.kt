@@ -72,5 +72,5 @@ private fun <T : Any> ByteBuffer.serve(typeName: String, len: Int) =
     serve<T, ByteBuffer, T>(
         typeName,
         { buf(len) { it.read(Class.forName(typeName)) as T } },
-        { it.extrude(this, len) }
+        { extrude(it, len) }
     )

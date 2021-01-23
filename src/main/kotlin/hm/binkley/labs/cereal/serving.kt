@@ -6,7 +6,7 @@ import java.util.ServiceLoader
 internal fun <T : Any, U, R> U.serve(
     typeName: String,
     default: U.() -> R,
-    match: U.(Grain<T>) -> R,
+    match: Grain<T>.(U) -> R,
 ): R {
     val grains = ServiceLoader.load(Grain::class.java).filter {
         it.consent(typeName)
@@ -16,7 +16,7 @@ internal fun <T : Any, U, R> U.serve(
 
     return when (grains.size) {
         0 -> default()
-        1 -> match(grains.first())
+        1 -> grains.first().match(this)
         else -> throw Bug("Too many grains: $typeName")
     }
 }

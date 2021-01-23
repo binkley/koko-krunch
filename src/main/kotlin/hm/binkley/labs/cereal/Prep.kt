@@ -29,5 +29,5 @@ private fun <T : Any> T.serve(typeName: String) =
     serve<T, T, Prep>(
         typeName,
         { with(write()) { size to { it.put(this) } } },
-        { it.absorb(this) }
+        { absorb(it) }
     )
