@@ -3,7 +3,7 @@ package hm.binkley.labs.cereal
 import java.nio.ByteBuffer
 
 internal fun Iterable<Prep>.newBuffer() =
-    ByteBuffer.allocate(map { it.allocateSize }.sum() + 1)
+    ByteBuffer.allocate(MAGIC.length + 1 + map { it.allocateSize }.sum() + 1)
 
 internal fun ByteArray.toByteBuffer() = ByteBuffer.wrap(this)
 internal val ByteBuffer.byte get() = get()

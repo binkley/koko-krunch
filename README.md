@@ -46,8 +46,12 @@ Koko Krunch lays out serialized byte buffers thusly:
    stored as MSB followed by LSB.
 2. All data is kept contiguously: there is no padding between data unless
    explicitly stated.
-3. A buffer is a sequence of records, and is terminated with a 0 byte past the
-   last record (in addition to any 0 bytes from records themselves).
+3. A buffer is a metadata prefix followed by a sequence of records, and is
+   terminated with a 0 byte past the last record (in addition to any 0 bytes
+   from records themselves).
+4. The metadata prefix is 5 bytes long:
+    1. 4 bytes spelling "KOKO" in ASCII.
+    2. 1 byte for the format version, presently set to version 0.
 4. A record is a triple:
     1. A 4-byte (32-bit integer) count of the payload length.
     2. A variable-length byte sequence payload specific to the data type.
@@ -57,10 +61,9 @@ Koko Krunch lays out serialized byte buffers thusly:
     2. A 0-length byte sequence payload.
     3. An additional, terminating 0 byte.
 6. The records are in sequence of:
-    1. A metadata header.  **TODO**
-    2. A string data record of the FQN class name of the serialized object.
-    3. a 4-byte (32-bit integer) count of the number of subsequent records.
-    4. A sequence of records for each non-static, non-transient field.
+    1. A string data record of the FQN class name of the serialized object.
+    2. a 4-byte (32-bit integer) count of the number of subsequent records.
+    3. A sequence of records for each non-static, non-transient field.
 7. A field sequence is a triple or duple:
     1. A record for the field name.
     2. A record for the FQN field type name.

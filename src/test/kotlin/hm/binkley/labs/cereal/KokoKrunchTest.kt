@@ -51,6 +51,28 @@ internal class KokoKrunchTest {
     }
 
     @Test
+    fun `should complain about bad magic`() {
+        val bytes = written.write().apply {
+            replaceAt(0, MAGIC.replace('K', 'J').toByteArray())
+        }
+
+        shouldThrowExactly<AssertionError> {
+            bytes.read<Cereal>()
+        }
+    }
+
+    @Test
+    fun `should complain about bad version`() {
+        val bytes = written.write().apply {
+            this[4] = (VERSION + 1).toByte()
+        }
+
+        shouldThrowExactly<AssertionError> {
+            bytes.read<Cereal>()
+        }
+    }
+
+    @Test
     fun `should complain about bad sentinel`() {
         val bytes = written.write().apply {
             this[size - 1] = 1.toByte()

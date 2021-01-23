@@ -5,6 +5,19 @@ import java.nio.BufferUnderflowException
 import java.nio.ByteBuffer
 
 /** @todo Syntactic sugar causes cancer of the semicolon */
+internal fun ByteBuffer.assertMetadata() = try {
+    MAGIC.forEach {
+        if (it.toByte() != byte) throw AssertionError("Not $MAGIC data")
+    }
+
+    val version = byte
+    if (VERSION != version) throw AssertionError("Wrong $MAGIC version: expected $VERSION; got $version")
+
+    this
+} catch (e: BufferUnderflowException) {
+    throw AssertionError("Missing bytes: possibly truncated or corrupted, or class version changed")
+}
+
 internal fun <T> ByteBuffer.assertEnoughData(
     clazz: Class<T>,
     block: ByteBuffer.(Class<T>) -> T,
