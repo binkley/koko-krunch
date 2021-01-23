@@ -2,7 +2,6 @@ package hm.binkley.labs.cereal
 
 import java.lang.reflect.Field
 import java.nio.ByteBuffer
-import java.util.ServiceLoader
 
 internal fun <T> ByteBuffer.fields(clazz: Class<T>):
     Iterable<Pair<Field, Any?>> = FieldIterable(this, clazz)
@@ -69,19 +68,9 @@ private fun ByteBuffer.readValue(
 }
 
 @Suppress("UNCHECKED_CAST")
-private fun <T : Any> ByteBuffer.serve(
-    typeName: String,
-    len: Int,
-): T {
-    val grains = ServiceLoader.load(Grain::class.java).filter {
-        it.consent(typeName)
-    }.map {
-        it as Grain<T>
-    }
-
-    return when (grains.size) {
-        0 -> buf(len) { it.read(Class.forName(typeName)) }
-        1 -> grains.first().extrude(this, len)
-        else -> throw Bug("Too many grains: $typeName")
-    } as T
-}
+private fun <T : Any> ByteBuffer.serve(typeName: String, len: Int) =
+    serve<T, ByteBuffer, T>(
+        typeName,
+        { buf(len) { it.read(Class.forName(typeName)) as T } },
+        { it.extrude(this, len) }
+    )

@@ -1,7 +1,6 @@
 package hm.binkley.labs.cereal
 
 import java.nio.ByteBuffer
-import java.util.ServiceLoader.load
 
 internal val Prep.allocateSize
     get() = Int.SIZE_BYTES + (if (-1 == first) 0 else first) + 1
@@ -26,17 +25,9 @@ internal fun Any?.study(): Prep = when (this) {
     else -> serve(this::class.java.name)
 }
 
-@Suppress("UNCHECKED_CAST")
-private fun <T : Any> T.serve(typeName: String): Prep {
-    val grains = load(Grain::class.java).filter {
-        it.consent(typeName)
-    }.map {
-        it as Grain<T>
-    }
-
-    return when (grains.size) {
-        0 -> with(write()) { size to { it.put(this) } }
-        1 -> grains.first().absorb(this)
-        else -> throw Bug("Too many grains: $typeName")
-    }
-}
+private fun <T : Any> T.serve(typeName: String) =
+    serve<T, T, Prep>(
+        typeName,
+        { with(write()) { size to { it.put(this) } } },
+        { it.absorb(this) }
+    )
