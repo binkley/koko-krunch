@@ -6,8 +6,8 @@ internal fun Iterable<Prep>.newBuffer() =
     ByteBuffer.allocate(map { it.allocateSize }.sum() + 1)
 
 internal fun ByteArray.toByteBuffer() = ByteBuffer.wrap(this)
-
 internal val ByteBuffer.byte get() = get()
+internal fun ByteBuffer.putByte(byte: Byte) = put(byte)
 
 internal fun <T> ByteBuffer.buf(len: Int, ctor: (ByteArray) -> T): T =
     ByteArray(len).let {

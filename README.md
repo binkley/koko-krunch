@@ -14,10 +14,11 @@ width="20%"/>
 [![issues](https://img.shields.io/github/issues/binkley/koko-krunch.svg)](https://github.com/binkley/koko-krunch/issues/)
 [![Public Domain](https://img.shields.io/badge/license-Public%20Domain-blue.svg)](http://unlicense.org/)
 
-* [Build](#build)
+* [Build and try](#build-and-try)
+* [TODO](#todo)
 * [Reading](#reading)
 
-## Build
+## Build and try
 
 Try [`./run`](./run) for a demonstration.
 
@@ -32,6 +33,22 @@ $ ./run
 $ ./batect build
 $ ./batect run
 ```
+
+---
+
+## TODO
+
+* Use something like `metainf-services` annotation processor to generate the
+  `ServiceLoader` files.  It is a Java annotation processor.  Kapt maven 
+  plugin seems broken (creates duplicate generated source roots):
+  ```
+  [INFO] --- kotlin-maven-plugin:1.4.21:compile (compile-kotlin) @ koko-krunch ---
+  [WARNING] Duplicate source root: /Users/boxley/src/kt/koko-krunch/target/generated-sources/kapt/compile
+  [WARNING] Duplicate source root: /Users/boxley/src/kt/koko-krunch/target/generated-sources/kaptKotlin/compile
+  [ERROR] warnings found and -Werror specified
+  ```
+
+---
 
 ## Reading
 
