@@ -4,8 +4,6 @@ import java.nio.ByteBuffer
 
 typealias Prep = Pair<Int, (ByteBuffer) -> ByteBuffer>
 
-internal const val NIL_VALUE = -1
-
 internal val Prep.allocateSize
     get() = Int.SIZE_BYTES + (if (NIL_VALUE == first) 0 else first) + 1
 

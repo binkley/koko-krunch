@@ -4,6 +4,8 @@ import lombok.Generated
 import java.lang.reflect.Field
 import java.nio.ByteBuffer
 
+internal const val NIL_VALUE = -1
+
 inline fun <reified T> ByteArray.read(): T = read(T::class.java)
 
 /**
