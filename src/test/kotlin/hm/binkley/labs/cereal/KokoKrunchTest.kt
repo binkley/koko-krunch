@@ -51,9 +51,16 @@ internal class KokoKrunchTest {
     }
 
     @Test
+    fun `should complain about too little data`() {
+        shouldThrowExactly<AssertionError> {
+            ByteArray(0).read<Cereal>()
+        }
+    }
+
+    @Test
     fun `should complain about bad magic`() {
         val bytes = written.write().apply {
-            replaceAt(0, MAGIC.replace('K', 'J').toByteArray())
+            replaceAt(0, MAGIC.replace(MAGIC[0], MAGIC[0] - 1).toByteArray())
         }
 
         shouldThrowExactly<AssertionError> {
