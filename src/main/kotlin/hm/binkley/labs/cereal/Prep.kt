@@ -2,6 +2,8 @@ package hm.binkley.labs.cereal
 
 import java.nio.ByteBuffer
 
+typealias Prep = Pair<Int, (ByteBuffer) -> ByteBuffer>
+
 internal val Prep.allocateSize
     get() = Int.SIZE_BYTES + (if (-1 == first) 0 else first) + 1
 
