@@ -4,8 +4,10 @@ import java.nio.ByteBuffer
 
 typealias Prep = Pair<Int, (ByteBuffer) -> ByteBuffer>
 
+internal const val NIL_VALUE = -1
+
 internal val Prep.allocateSize
-    get() = Int.SIZE_BYTES + (if (-1 == first) 0 else first) + 1
+    get() = Int.SIZE_BYTES + (if (NIL_VALUE == first) 0 else first) + 1
 
 internal fun Prep.writeTo(buf: ByteBuffer) = buf.apply {
     putInt(first)
@@ -14,7 +16,7 @@ internal fun Prep.writeTo(buf: ByteBuffer) = buf.apply {
 }
 
 internal fun Any?.study(): Prep = when (this) {
-    null -> -1 to { it }
+    null -> NIL_VALUE to { it }
     is Boolean -> Byte.SIZE_BYTES to { it.putByte(if (this) 1 else 0) }
     is Byte -> Byte.SIZE_BYTES to { it.putByte(this) }
     is Char -> Char.SIZE_BYTES to { it.putChar(this) }

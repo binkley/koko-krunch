@@ -32,7 +32,7 @@ internal fun ByteArray.indexOf(bytes: ByteArray): Int {
         return i
     }
 
-    return -1
+    return -1 // TODO: Not same as NIL_VALUE!
 }
 
 internal fun ByteArray.replaceAt(at: Int, bytes: ByteArray) {

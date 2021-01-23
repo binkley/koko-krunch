@@ -52,7 +52,7 @@ private fun ByteBuffer.readValue(
     field: Field,
     len: Int,
 ) = when {
-    -1 == len -> null
+    NIL_VALUE == len -> null
     field.type.isEnum -> field.type.enumConstants[int]
     else -> when (val typeName = field.type.name) {
         Boolean::class.java.name -> 0.toByte() != byte
