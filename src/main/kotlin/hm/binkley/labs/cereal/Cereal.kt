@@ -6,8 +6,8 @@ import java.nio.ByteBuffer
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
-const val MAGIC = "KOKO"
-const val VERSION = 0.toByte()
+const val MAGIC: String = "KOKO"
+const val VERSION: Byte = 0.toByte()
 
 internal const val NIL_VALUE = -1
 

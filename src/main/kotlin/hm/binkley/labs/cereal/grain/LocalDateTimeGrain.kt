@@ -9,7 +9,8 @@ import java.time.LocalTime
 import kotlin.reflect.KClass
 
 class LocalDateTimeGrain : Grain<LocalDateTime> {
-    override fun consent(type: KClass<*>) = LocalDateTime::class == type
+    override fun consent(type: KClass<*>): Boolean =
+        LocalDateTime::class == type
 
     override fun absorb(it: LocalDateTime): Prep =
         7 * Int.SIZE_BYTES to { buf ->

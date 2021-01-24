@@ -7,7 +7,7 @@ import java.nio.ByteBuffer
 import kotlin.reflect.KClass
 
 class StringGrain : Grain<String> {
-    override fun consent(type: KClass<*>) = String::class == type
+    override fun consent(type: KClass<*>): Boolean = String::class == type
 
     override fun absorb(it: String): Prep =
         with(it.toByteArray()) { size to { it.put(this) } }

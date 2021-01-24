@@ -7,7 +7,7 @@ import java.util.UUID
 import kotlin.reflect.KClass
 
 class UUIDGrain : Grain<UUID> {
-    override fun consent(type: KClass<*>) = UUID::class == type
+    override fun consent(type: KClass<*>): Boolean = UUID::class == type
 
     override fun absorb(it: UUID): Prep =
         2 * Long.SIZE_BYTES to { buf ->

@@ -8,7 +8,7 @@ import java.nio.ByteBuffer
 import kotlin.reflect.KClass
 
 class BigIntegerGrain : Grain<BigInteger> {
-    override fun consent(type: KClass<*>) = BigInteger::class == type
+    override fun consent(type: KClass<*>): Boolean = BigInteger::class == type
 
     override fun absorb(it: BigInteger): Prep =
         with(it.toByteArray()) { size to { it.put(this) } }

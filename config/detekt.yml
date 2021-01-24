@@ -1,14 +1,14 @@
 build:
   maxIssues: 0
 
-console-reports:
-  exclude:
-  # - 'ProjectStatisticsReport'
-  # - 'ComplexityReport'
-  # - 'NotificationReport'
-  # - 'FindingsReport'
-  # - 'FileBasedFindingsReport'
-  # - 'BuildFailureReport'
+#console-reports:
+#  exclude:
+# - 'ProjectStatisticsReport'
+# - 'ComplexityReport'
+# - 'NotificationReport'
+# - 'FindingsReport'
+# - 'FileBasedFindingsReport'
+# - 'BuildFailureReport'
 
 #complexity:
 #  excludes: '**/test/**'
