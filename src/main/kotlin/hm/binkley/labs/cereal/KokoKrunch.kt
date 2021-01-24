@@ -35,6 +35,7 @@ internal class KokoKrunch(
     val required: String,
     val optional: String?,
     val byte: Byte,
+    val nullablePrimitive: Byte?,
     val s: Short,
     val ch: Char,
     val long: Long,
@@ -67,6 +68,7 @@ internal class KokoKrunch(
         f: Float = this.f,
         long: Long = this.long,
         now: Instant = this.now,
+        nullablePrimitive: Byte? = this.nullablePrimitive,
         optional: String? = this.optional,
         required: String = this.required,
         s: Short = this.s,
@@ -86,6 +88,7 @@ internal class KokoKrunch(
         f = f,
         long = long,
         now = now,
+        nullablePrimitive = nullablePrimitive,
         optional = optional,
         required = required,
         s = s,
@@ -108,6 +111,7 @@ internal class KokoKrunch(
         f == other.f &&
         long == other.long &&
         now == other.now &&
+        nullablePrimitive == other.nullablePrimitive &&
         optional == other.optional &&
         required == other.required &&
         s == other.s &&
@@ -128,6 +132,7 @@ internal class KokoKrunch(
             f,
             long,
             now,
+            nullablePrimitive,
             optional,
             required,
             s,
@@ -136,5 +141,5 @@ internal class KokoKrunch(
         )
 
     override fun toString() =
-        "Cereal(bint=$bint, required='$required', optional='$optional', byte=${byte.pretty()}, s=$s, ch=$ch, long=$long, bool=$bool, drool=$drool, d=$d, f=$f, z=$z, crunch=$crunch, uuid=$uuid, now=$now, how long=${`how long`}, when=${`when`}, super=${super.toString()})"
+        "Cereal(bint=$bint, required='$required', optional='$optional', byte=${byte.pretty()}, nullablePrimitive=${nullablePrimitive.pretty()}, s=$s, ch=$ch, long=$long, bool=$bool, drool=$drool, d=$d, f=$f, z=$z, crunch=$crunch, uuid=$uuid, now=$now, how long=${`how long`}, when=${`when`}, super=${super.toString()})"
 }

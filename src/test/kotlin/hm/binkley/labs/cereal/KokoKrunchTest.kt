@@ -14,7 +14,7 @@ import java.time.Month.AUGUST
 import java.time.temporal.ChronoUnit.DAYS
 import java.util.UUID
 
-private val written = KokoKrunch(
+internal val fixture = KokoKrunch(
     beans = 20,
     bint = TWO.pow(Long.SIZE_BITS + 1),
     bool = true,
@@ -27,6 +27,7 @@ private val written = KokoKrunch(
     `how long` = Duration.ofDays(1L).plusNanos(1L),
     long = 9_876_543_210,
     now = EPOCH.plus(20L * 365, DAYS).plusNanos(42L),
+    nullablePrimitive = null,
     optional = null,
     required = "BOB",
     s = 1024.toShort(),
@@ -42,14 +43,14 @@ private val written = KokoKrunch(
 internal class KokoKrunchTest {
     @Test
     fun `should equal`() {
-        written.copy() shouldBe written
-        written.copy(beans = written.beans + 1) shouldNotBe written
+        fixture.copy() shouldBe fixture
+        fixture.copy(beans = fixture.beans + 1) shouldNotBe fixture
     }
 
     @Test
     fun `should hash`() {
-        written.copy().hashCode() shouldBe written.hashCode()
-        written.copy(beans = written.beans + 1).hashCode() shouldNotBe
-            written.hashCode()
+        fixture.copy().hashCode() shouldBe fixture.hashCode()
+        fixture.copy(beans = fixture.beans + 1).hashCode() shouldNotBe
+            fixture.hashCode()
     }
 }

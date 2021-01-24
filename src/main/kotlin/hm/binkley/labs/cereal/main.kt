@@ -21,6 +21,7 @@ fun main() {
         `how long` = Duration.ofDays(1L).plusNanos(1L),
         long = 9_876_543_210,
         now = Instant.now(),
+        nullablePrimitive = null,
         optional = null,
         required = "BOB",
         s = 1024.toShort(),
