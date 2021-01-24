@@ -14,17 +14,11 @@ internal fun <T : Any, U, R> U.serve(
     type: KClass<*>,
     default: U.() -> R,
     match: Grain<T>.(U) -> R,
-): R {
-    val grains = load(Grain::class.java).filter {
-        it.consent(type)
-    }.map {
-        @Suppress("UNCHECKED_CAST")
-        it as Grain<T>
-    }
-
-    return when (grains.size) {
-        0 -> default()
-        1 -> grains.first().match(this)
-        else -> throw Bug("Too many grains: $type")
-    }
-}
+) = load(Grain::class.java).filter {
+    it.consent(type)
+}.map {
+    cast<Grain<T>>(it)
+}.map {
+    it.match(this)
+    // size >= 2 forbidden by JDK specifications for ServiceLoader
+}.firstOrNull() ?: default()

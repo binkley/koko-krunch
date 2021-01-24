@@ -67,9 +67,8 @@ internal fun ByteBuffer.readInt() = int.let {
 
 internal fun <T : Any> ByteBuffer.readKClass() = readString().toKClass<T>()
 
-@Suppress("UNCHECKED_CAST")
 private fun <T : Any> String.toKClass() =
-    (Class.forName(this) as Class<T>).kotlin
+    cast<Class<T>>(Class.forName(this)).kotlin
 
 internal fun <T : Any> ByteBuffer.readField(klass: KClass<T>) =
     readString().let { fieldName ->
