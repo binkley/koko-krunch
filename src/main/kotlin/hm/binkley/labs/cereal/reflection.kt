@@ -33,6 +33,7 @@ internal val KClass<*>.serializedFields: List<Field>
         return fields.onEach { it.isAccessible = true }
     }
 
+/** @todo Save this off; don't rescan class fields each call */
 internal fun KClass<*>.getSerializedField(name: String) =
     serializedFields.firstOrNull { name == it.name }
         ?: throw AssertionError("Bad field name: $name")
