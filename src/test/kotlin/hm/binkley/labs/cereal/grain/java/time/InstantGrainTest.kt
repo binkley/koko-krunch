@@ -1,4 +1,4 @@
-package hm.binkley.labs.cereal.grain
+package hm.binkley.labs.cereal.grain.java.time
 
 import hm.binkley.labs.cereal.Grain
 import io.kotest.matchers.collections.shouldHaveSize

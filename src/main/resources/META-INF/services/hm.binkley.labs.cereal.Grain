@@ -1,8 +1,8 @@
-hm.binkley.labs.cereal.grain.BigIntegerGrain
-hm.binkley.labs.cereal.grain.DurationGrain
-hm.binkley.labs.cereal.grain.InstantGrain
-hm.binkley.labs.cereal.grain.LocalDateGrain
-hm.binkley.labs.cereal.grain.LocalDateTimeGrain
-hm.binkley.labs.cereal.grain.LocalTimeGrain
 hm.binkley.labs.cereal.grain.StringGrain
-hm.binkley.labs.cereal.grain.UUIDGrain
+hm.binkley.labs.cereal.grain.java.math.BigIntegerGrain
+hm.binkley.labs.cereal.grain.java.time.DurationGrain
+hm.binkley.labs.cereal.grain.java.time.InstantGrain
+hm.binkley.labs.cereal.grain.java.time.LocalDateGrain
+hm.binkley.labs.cereal.grain.java.time.LocalDateTimeGrain
+hm.binkley.labs.cereal.grain.java.time.LocalTimeGrain
+hm.binkley.labs.cereal.grain.java.util.UUIDGrain
