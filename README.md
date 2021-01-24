@@ -97,6 +97,8 @@ Koko Krunch lays out serialized byte buffers thusly:
   [WARNING] Duplicate source root: /Users/boxley/src/kt/koko-krunch/target/generated-sources/kaptKotlin/compile
   [ERROR] warnings found and -Werror specified
   ```
+* Use `KClass.qualifiedName` rather than `Class.getName()`.  However, 
+  `qualifiedName` is `null` for local and anonymous classes
 
 ---
 
