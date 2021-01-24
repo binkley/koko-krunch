@@ -15,7 +15,7 @@ import java.time.temporal.ChronoUnit.DAYS
 import java.util.UUID
 import kotlin.reflect.full.memberProperties
 
-private val written = Cereal(
+private val written = KokoKrunch(
     beans = 20,
     bint = TWO.pow(Long.SIZE_BITS + 1),
     bool = true,
@@ -40,12 +40,12 @@ private val written = Cereal(
     z = 13,
 )
 
-internal class KokoKrunchTest {
+internal class CerealTest {
     @Test
     fun `should round trip`() {
         val bytes = written.write()
 
-        val read = bytes.read<Cereal>()
+        val read = bytes.read<KokoKrunch>()
 
         read shouldBe written
     }
@@ -53,7 +53,7 @@ internal class KokoKrunchTest {
     @Test
     fun `should complain about too little data`() {
         shouldThrowExactly<AssertionError> {
-            ByteArray(0).read<Cereal>()
+            ByteArray(0).read<KokoKrunch>()
         }
     }
 
@@ -64,7 +64,7 @@ internal class KokoKrunchTest {
         }
 
         shouldThrowExactly<AssertionError> {
-            bytes.read<Cereal>()
+            bytes.read<KokoKrunch>()
         }
     }
 
@@ -75,7 +75,7 @@ internal class KokoKrunchTest {
         }
 
         shouldThrowExactly<AssertionError> {
-            bytes.read<Cereal>()
+            bytes.read<KokoKrunch>()
         }
     }
 
@@ -86,18 +86,19 @@ internal class KokoKrunchTest {
         }
 
         shouldThrowExactly<AssertionError> {
-            bytes.read<Cereal>()
+            bytes.read<KokoKrunch>()
         }
     }
 
     @Test
     fun `should complain about wrong class type`() {
         val bytes = written.write().apply {
-            this[indexOf('C'.toByte())] = 'D'.toByte()
+            val i = indexOf("KokoKrunch".toByteArray())
+            replaceAt(i, "JojoBrunch".toByteArray())
         }
 
         shouldThrowExactly<AssertionError> {
-            bytes.read<Cereal>()
+            bytes.read<KokoKrunch>()
         }
     }
 
@@ -108,20 +109,20 @@ internal class KokoKrunchTest {
         }
 
         shouldThrowExactly<AssertionError> {
-            bytes.read<Cereal>()
+            bytes.read<KokoKrunch>()
         }
     }
 
     @Test
     fun `should complain about wrong field count`() {
         // Subtract 1 to ignore the transient field
-        val count = Cereal::class.memberProperties.size - 1
+        val count = KokoKrunch::class.memberProperties.size - 1
         val bytes = written.write().apply {
             this[indexOf(count.toByte())] = (count - 1).toByte()
         }
 
         shouldThrowExactly<AssertionError> {
-            bytes.read<Cereal>()
+            bytes.read<KokoKrunch>()
         }
     }
 
@@ -135,7 +136,7 @@ internal class KokoKrunchTest {
         }
 
         shouldThrowExactly<AssertionError> {
-            bytes.read<Cereal>()
+            bytes.read<KokoKrunch>()
         }
     }
 
@@ -147,7 +148,7 @@ internal class KokoKrunchTest {
         }
 
         shouldThrowExactly<AssertionError> {
-            bytes.read<Cereal>()
+            bytes.read<KokoKrunch>()
         }
     }
 
@@ -159,7 +160,7 @@ internal class KokoKrunchTest {
         }
 
         shouldThrowExactly<AssertionError> {
-            bytes.read<Cereal>()
+            bytes.read<KokoKrunch>()
         }
     }
 
@@ -171,7 +172,7 @@ internal class KokoKrunchTest {
         }
 
         shouldThrowExactly<AssertionError> {
-            bytes.read<Cereal>()
+            bytes.read<KokoKrunch>()
         }
     }
 
@@ -182,7 +183,7 @@ internal class KokoKrunchTest {
         }
 
         shouldThrowExactly<AssertionError> {
-            bytes.read<Cereal>()
+            bytes.read<KokoKrunch>()
         }
     }
 }

@@ -77,12 +77,12 @@ Koko Krunch lays out serialized byte buffers thusly:
 
 ### Serializing
 
-- [`fun Any.write(): ByteArray`](./src/main/kotlin/hm/binkley/labs/cereal/KokoKrunch.kt)
+- [`fun Any.write(): ByteArray`](src/main/kotlin/hm/binkley/labs/cereal/Cereal.kt)
 
 ## Deserializing
 
-- [`inline fun <reified T> ByteArray.read(): T`](./src/main/kotlin/hm/binkley/labs/cereal/KokoKrunch.kt)
-- [`fun <T> ByteArray.read(clazz: Class<T>): T`](./src/main/kotlin/hm/binkley/labs/cereal/KokoKrunch.kt)
+- [`inline fun <reified T> ByteArray.read(): T`](src/main/kotlin/hm/binkley/labs/cereal/Cereal.kt)
+- [`fun <T> ByteArray.read(clazz: Class<T>): T`](src/main/kotlin/hm/binkley/labs/cereal/Cereal.kt)
 
 ---
 
@@ -97,7 +97,7 @@ Koko Krunch lays out serialized byte buffers thusly:
   [WARNING] Duplicate source root: /Users/boxley/src/kt/koko-krunch/target/generated-sources/kaptKotlin/compile
   [ERROR] warnings found and -Werror specified
   ```
-* Use `KClass.qualifiedName` rather than `Class.getName()`.  However, 
+* Use `KClass.qualifiedName` rather than `Class.getName()`. However,
   `qualifiedName` is `null` for local and anonymous classes
 
 ---

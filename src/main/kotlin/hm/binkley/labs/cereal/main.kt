@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 import java.util.UUID.randomUUID
 
 fun main() {
-    val written = Cereal(
+    val written = KokoKrunch(
         beans = 20,
         bint = TWO.pow(Long.SIZE_BITS + 1),
         bool = true,
@@ -32,7 +32,7 @@ fun main() {
 
     println("WRITE -> $written")
     println("BYTES (len=${bytes.size}) -> ${bytes.pretty()}")
-    val read = bytes.read<Cereal>()
+    val read = bytes.read<KokoKrunch>()
     println("READ -> $read")
     println("EQ? -> ${read == written}")
     println()

@@ -1,101 +1,75 @@
 package hm.binkley.labs.cereal
 
 import lombok.Generated
-import java.math.BigInteger
-import java.time.Duration
-import java.time.Instant
-import java.time.LocalDateTime
-import java.util.Objects.hash
-import java.util.UUID
+import java.lang.reflect.Field
+import java.nio.ByteBuffer
+import kotlin.reflect.KClass
+import kotlin.reflect.jvm.jvmName
 
-@Generated // Lie to JaCoCo
-internal open class Chocolate(val beans: Int) {
-    override fun equals(other: Any?) = this === other ||
-        other is Chocolate &&
-        javaClass == other.javaClass &&
-        beans == other.beans
+const val MAGIC = "KOKO"
+const val VERSION = 0.toByte()
 
-    override fun hashCode() = hash(beans)
-    override fun toString() = "Chocolate(beans=$beans)"
+internal const val NIL_VALUE = -1
 
-    companion object {
-        @Suppress("unused")
-        const val FOO: Int = Int.MAX_VALUE
+inline fun <reified T : Any> ByteArray.read(): T = read(T::class)
+
+fun <T : Any> ByteArray.read(kclass: KClass<T>): T = toByteBuffer()
+    .assertMetadata()
+    .assertEnoughData(kclass) {
+        val instance = kclass.readFrom(this) { blankInstance(it) }
+        for ((field, value) in kclass.readFrom(this) { fields(it) })
+            field.set(instance, value)
+
+        assertSentinel()
+        assertComplete()
+
+        instance
     }
+
+fun Any.write(): ByteArray {
+    val preps = classAndFieldPreps()
+    val buf = preps.newBuffer()
+
+    MAGIC.forEach { buf.putByte(it.toByte()) }
+    buf.putByte(VERSION)
+
+    preps.forEach { it.writeTo(buf) }
+    buf.put(0)
+
+    return buf.array()
 }
 
-internal enum class Crunchiness { MEDIUM }
+private fun Any.classAndFieldPreps(): List<Prep> {
+    val fields = this::class.serializedFields.sortedBy { it.name }
 
-@Generated // Lie to JaCoCo
-internal data class Crunch(val level: Crunchiness)
+    val classPreps = listOf(
+        this::class.jvmName,
+        fields.size,
+    ).map { it.study() }
 
-@Generated // Lie to JaCoCo
-internal class Cereal(
-    val bint: BigInteger,
-    val required: String,
-    val optional: String?,
-    val byte: Byte,
-    val s: Short,
-    val ch: Char,
-    val long: Long,
-    val bool: Boolean,
-    val drool: Boolean,
-    val d: Double,
-    val f: Float,
-    val z: Int,
-    val crunch: Crunch,
-    val uuid: UUID,
-    val now: Instant,
-    val `how long`: Duration,
-    val `when`: LocalDateTime,
-    @Suppress("unused")
-    @Transient
-    val transient: Long = 0,
-    beans: Int,
-) : Chocolate(beans) {
-    override fun equals(other: Any?) = this === other ||
-        other is Cereal &&
-        javaClass == other.javaClass &&
-        beans == other.beans &&
-        bint == other.bint &&
-        required == other.required &&
-        optional == other.optional &&
-        byte == other.byte &&
-        s == other.s &&
-        ch == other.ch &&
-        long == other.long &&
-        bool == other.bool &&
-        drool == other.drool &&
-        d == other.d &&
-        f == other.f &&
-        z == other.z &&
-        crunch == other.crunch &&
-        uuid == other.uuid &&
-        now == other.now &&
-        `how long` == other.`how long` &&
-        `when` == other.`when`
+    val fieldPreps = fields
+        .map { it.info(this) }
+        .flatMap { it.study() }
 
-    override fun hashCode() =
-        hash(
-            bint,
-            required,
-            optional,
-            byte,
-            s,
-            ch,
-            long,
-            bool,
-            drool,
-            d,
-            f,
-            z,
-            crunch,
-            uuid,
-            now,
-            `how long`,
-            `when`,
-        )
-
-    override fun toString() =
-        "Cereal(bint=$bint, required='$required', optional='$optional', byte=${byte.pretty()}, s=$s, ch=$ch, long=$long, bool=$bool, drool=$drool, d=$d, f=$f, z=$z, crunch=$crunch, uuid=$uuid, now=$now, how long=${`how long`}, when=${`when`}, super=${super.toString()})"
+    return classPreps + fieldPreps
 }
+
+private fun <T : Any> ByteBuffer.blankInstance(expectedClass: KClass<T>) =
+    assertClassName(expectedClass).let {
+        expectedClass.newBlankInstance()
+    }
+
+@Generated // Lie to JaCoCo
+private data class FieldInfo(
+    val name: String,
+    val typeName: String,
+    val value: Any?,
+)
+
+private fun Field.info(o: Any) = FieldInfo(name, type.name, get(o))
+
+private fun FieldInfo.study() = listOf(
+    name,
+    typeName,
+    value
+).map { it.study() }
