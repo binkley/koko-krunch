@@ -6,11 +6,10 @@ import java.nio.ByteBuffer
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
-import kotlin.reflect.jvm.jvmName
+import kotlin.reflect.KClass
 
 class LocalDateTimeGrain : Grain<LocalDateTime> {
-    override fun consent(typeName: String) =
-        LocalDateTime::class.jvmName == typeName
+    override fun consent(type: KClass<*>) = LocalDateTime::class == type
 
     override fun absorb(it: LocalDateTime): Prep =
         7 * Int.SIZE_BYTES to { buf ->

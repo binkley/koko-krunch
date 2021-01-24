@@ -3,16 +3,15 @@ package hm.binkley.labs.cereal
 import java.lang.reflect.Field
 import java.nio.ByteBuffer
 import kotlin.reflect.KClass
-import kotlin.reflect.jvm.jvmName
 
-internal fun <T : Any> ByteBuffer.fields(kclass: KClass<T>):
-    Iterable<Pair<Field, Any?>> = FieldIterable(this, kclass)
+internal fun <T : Any> ByteBuffer.fields(klass: KClass<T>):
+    Iterable<Pair<Field, Any?>> = FieldIterable(this, klass)
 
 private class FieldIterable<T : Any>(
     private val buf: ByteBuffer,
-    private val kclass: KClass<T>,
+    private val klass: KClass<T>,
 ) : Iterable<Pair<Field, Any?>> {
-    private val fieldCount: Int = kclass.readFrom(buf) { fieldCount(it) }
+    private val fieldCount: Int = klass.readFrom(buf) { fieldCount(it) }
 
     override fun iterator() = FieldIterator()
 
@@ -21,7 +20,7 @@ private class FieldIterable<T : Any>(
 
         override fun hasNext() = fieldCount != n
         override fun next(): Pair<Field, Any?> {
-            val next = kclass.readFrom(buf) { nextField(it) }
+            val next = klass.readFrom(buf) { nextField(it) }
             ++n
             return next
         }
@@ -33,8 +32,8 @@ private fun <T : Any> ByteBuffer.fieldCount(expectedClass: KClass<T>) =
         assertFieldCount(expectedClass, it)
     }
 
-private fun <T : Any> ByteBuffer.nextField(kclass: KClass<T>): Pair<Field, Any?> {
-    val field = readField(kclass)
+private fun <T : Any> ByteBuffer.nextField(klass: KClass<T>): Pair<Field, Any?> {
+    val field = readField(klass)
     val len = int
     val value = readValue(field, len)
 
@@ -42,40 +41,3 @@ private fun <T : Any> ByteBuffer.nextField(kclass: KClass<T>): Pair<Field, Any?>
 
     return field to value
 }
-
-private fun <T : Any> ByteBuffer.readField(kclass: KClass<T>) =
-    readString().let { fieldName ->
-        kclass.getSerializedField(fieldName).also {
-            assertFieldTypeName(it)
-        }
-    }
-
-private fun ByteBuffer.readValue(
-    field: Field,
-    len: Int,
-) = when {
-    NIL_VALUE == len -> null
-    field.type.isEnum -> field.type.enumConstants[int]
-    else -> when (val typeName = field.type.name) {
-        Boolean::class.jvmName -> 0.toByte() != byte
-        Byte::class.jvmName -> byte
-        Char::class.jvmName -> char
-        Double::class.jvmName -> double
-        Float::class.jvmName -> float
-        Int::class.jvmName -> int
-        Long::class.jvmName -> long
-        Short::class.jvmName -> short
-        else -> serve(typeName, len)
-    }
-}
-
-private fun <T : Any> ByteBuffer.serve(typeName: String, len: Int) =
-    serve<T, ByteBuffer, T>(
-        typeName,
-        { buf(len) { it.read(typeName.toKClass()) } },
-        { extrude(it, len) }
-    )
-
-@Suppress("UNCHECKED_CAST")
-private fun <T : Any> String.toKClass() =
-    (Class.forName(this) as Class<T>).kotlin

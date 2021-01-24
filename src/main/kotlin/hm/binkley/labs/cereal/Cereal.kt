@@ -13,11 +13,11 @@ internal const val NIL_VALUE = -1
 
 inline fun <reified T : Any> ByteArray.read(): T = read(T::class)
 
-fun <T : Any> ByteArray.read(kclass: KClass<T>): T = toByteBuffer()
+fun <T : Any> ByteArray.read(klass: KClass<T>): T = toByteBuffer()
     .assertMetadata()
-    .assertEnoughData(kclass) {
-        val instance = kclass.readFrom(this) { blankInstance(it) }
-        for ((field, value) in kclass.readFrom(this) { fields(it) })
+    .assertEnoughData(klass) {
+        val instance = klass.readFrom(this) { blankInstance(it) }
+        for ((field, value) in klass.readFrom(this) { fields(it) })
             field.set(instance, value)
 
         assertSentinel()

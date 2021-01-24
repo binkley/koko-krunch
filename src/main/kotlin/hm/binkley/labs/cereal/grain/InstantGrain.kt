@@ -6,11 +6,10 @@ import java.nio.ByteBuffer
 import java.time.Instant
 import java.time.temporal.ChronoField.INSTANT_SECONDS
 import java.time.temporal.ChronoField.NANO_OF_SECOND
-import kotlin.reflect.jvm.jvmName
+import kotlin.reflect.KClass
 
 class InstantGrain : Grain<Instant> {
-    override fun consent(typeName: String) =
-        Instant::class.jvmName == typeName
+    override fun consent(type: KClass<*>) = Instant::class == type
 
     override fun absorb(it: Instant): Prep =
         (Long.SIZE_BYTES + Int.SIZE_BYTES) to { buf ->

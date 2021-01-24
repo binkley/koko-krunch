@@ -21,10 +21,10 @@ internal fun ByteBuffer.assertMetadata() = try {
 }
 
 internal fun <T : Any> ByteBuffer.assertEnoughData(
-    kclass: KClass<T>,
+    klass: KClass<T>,
     block: ByteBuffer.(KClass<T>) -> T,
 ) = try {
-    this.block(kclass)
+    this.block(klass)
 } catch (e: BufferUnderflowException) {
     throw AssertionError("Missing bytes: possibly truncated or corrupted, or class version changed")
 }
@@ -51,10 +51,10 @@ internal fun assertIntLength(actualLength: Int) {
 }
 
 internal fun <T : Any> assertFieldCount(
-    kclass: KClass<T>,
+    klass: KClass<T>,
     actualFieldCount: Int,
 ) {
-    val expectedFieldCount = kclass.serializedFields.size
+    val expectedFieldCount = klass.serializedFields.size
     assert(expectedFieldCount == actualFieldCount) {
         "Field counts changed between class versions: expected $expectedFieldCount; got $actualFieldCount"
     }

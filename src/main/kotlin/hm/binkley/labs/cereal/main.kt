@@ -40,23 +40,20 @@ fun main() {
 }
 
 private fun ByteArray.dump() {
-    val buf = toByteBuffer()
-    val magic = ByteArray(MAGIC.length)
-    buf.get(magic)
-    println("${String(magic)} ${buf.byte}")
-    println(buf.readString())
-    for (i in 0 until buf.readInt()) {
-        val name = buf.readString()
-        val type = buf.readString()
-        when (val len = buf.int) {
-            -1 -> println("#$i $name: $type = null")
-            else -> {
-                val value = ByteArray(len)
-                buf.get(value)
-                println("#$i $name: $type = ${value.pretty()}")
-            }
+    with(toByteBuffer()) {
+        val magic = ByteArray(MAGIC.length)
+        get(magic)
+        val version = byte
+        println("${String(magic)} $version")
+        val klass = readKClass<Any>()
+        println(klass)
+
+        (0 until readInt()).forEach {
+            val field = readField(klass)
+            println("#$it $field = ${readValue(field, int)}")
+            readSentinel()
         }
-        buf.readSentinel()
+
+        readSentinel()
     }
-    buf.readSentinel()
 }

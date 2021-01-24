@@ -1,5 +1,6 @@
 package hm.binkley.labs.cereal
 
+import java.lang.reflect.Field
 import java.nio.ByteBuffer
 import kotlin.reflect.KClass
 
@@ -63,5 +64,44 @@ internal fun ByteBuffer.readInt() = int.let {
         assertSentinel()
     }
 }
+
+internal fun <T : Any> ByteBuffer.readKClass() = readString().toKClass<T>()
+
+@Suppress("UNCHECKED_CAST")
+private fun <T : Any> String.toKClass() =
+    (Class.forName(this) as Class<T>).kotlin
+
+internal fun <T : Any> ByteBuffer.readField(klass: KClass<T>) =
+    readString().let { fieldName ->
+        klass.getSerializedField(fieldName).also {
+            assertFieldTypeName(it)
+        }
+    }
+
+internal fun ByteBuffer.readValue(
+    field: Field,
+    len: Int,
+) = when {
+    NIL_VALUE == len -> null
+    field.type.isEnum -> field.type.enumConstants[int]
+    else -> when (val type = field.type.kotlin) {
+        Boolean::class -> 0.toByte() != byte
+        Byte::class -> byte
+        Char::class -> char
+        Double::class -> double
+        Float::class -> float
+        Int::class -> int
+        Long::class -> long
+        Short::class -> short
+        else -> serve(type, len)
+    }
+}
+
+private fun <T : Any> ByteBuffer.serve(type: KClass<T>, len: Int) =
+    serve<T, ByteBuffer, T>(
+        type,
+        { buf(len) { it.read(type) } },
+        { extrude(it, len) }
+    )
 
 internal fun ByteBuffer.readSentinel() = byte

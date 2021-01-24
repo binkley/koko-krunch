@@ -4,11 +4,10 @@ import hm.binkley.labs.cereal.Grain
 import hm.binkley.labs.cereal.Prep
 import java.nio.ByteBuffer
 import java.time.Duration
-import kotlin.reflect.jvm.jvmName
+import kotlin.reflect.KClass
 
 class DurationGrain : Grain<Duration> {
-    override fun consent(typeName: String) =
-        Duration::class.jvmName == typeName
+    override fun consent(type: KClass<*>) = Duration::class == type
 
     override fun absorb(it: Duration): Prep =
         Long.SIZE_BYTES + Int.SIZE_BYTES to { buf ->

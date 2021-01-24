@@ -1,7 +1,7 @@
 package hm.binkley.labs.cereal
 
 import java.nio.ByteBuffer
-import kotlin.reflect.jvm.jvmName
+import kotlin.reflect.KClass
 
 typealias Prep = Pair<Int, (ByteBuffer) -> ByteBuffer>
 
@@ -25,12 +25,12 @@ internal fun Any?.study(): Prep = when (this) {
     is Int -> Int.SIZE_BYTES to { it.putInt(this) }
     is Long -> Long.SIZE_BYTES to { it.putLong(this) }
     is Short -> Short.SIZE_BYTES to { it.putShort(this) }
-    else -> serve(this::class.jvmName)
+    else -> serve(this::class)
 }
 
-private fun <T : Any> T.serve(typeName: String) =
+private fun <T : Any> T.serve(type: KClass<*>) =
     serve<T, T, Prep>(
-        typeName,
+        type,
         { with(write()) { size to { it.put(this) } } },
         { absorb(it) }
     )
