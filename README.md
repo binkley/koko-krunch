@@ -94,6 +94,8 @@ Koko Krunch lays out serialized byte buffers thusly:
 
 ## TODO
 
+* Support simple types at top-level: Currently KoKo assumes serialized 
+  types are complex
 * Use something like `metainf-services` annotation processor to generate the
   `ServiceLoader` files. It is a Java annotation processor. Kapt maven plugin
   seems broken (creates duplicate generated source roots):
@@ -103,8 +105,6 @@ Koko Krunch lays out serialized byte buffers thusly:
   [WARNING] Duplicate source root: /Users/boxley/src/kt/koko-krunch/target/generated-sources/kaptKotlin/compile
   [ERROR] warnings found and -Werror specified
   ```
-* Use `KClass.qualifiedName` rather than `Class.getName()`. However,
-  `qualifiedName` is `null` for local and anonymous classes
 
 ---
 
