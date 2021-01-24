@@ -3,6 +3,8 @@ package hm.binkley.labs.cereal
 import java.lang.reflect.Field
 import java.nio.BufferUnderflowException
 import java.nio.ByteBuffer
+import kotlin.reflect.KClass
+import kotlin.reflect.jvm.jvmName
 
 /** @todo Syntactic sugar causes cancer of the semicolon */
 internal fun ByteBuffer.assertMetadata() = try {
@@ -18,11 +20,11 @@ internal fun ByteBuffer.assertMetadata() = try {
     throw AssertionError("Missing bytes: possibly truncated or corrupted, or class version changed")
 }
 
-internal fun <T> ByteBuffer.assertEnoughData(
-    clazz: Class<T>,
-    block: ByteBuffer.(Class<T>) -> T,
+internal fun <T : Any> ByteBuffer.assertEnoughData(
+    kclass: KClass<T>,
+    block: ByteBuffer.(KClass<T>) -> T,
 ) = try {
-    this.block(clazz)
+    this.block(kclass)
 } catch (e: BufferUnderflowException) {
     throw AssertionError("Missing bytes: possibly truncated or corrupted, or class version changed")
 }
@@ -33,8 +35,8 @@ internal fun ByteBuffer.assertSentinel() = byte.also {
     }
 }
 
-internal fun <T> ByteBuffer.assertClassName(expectedClass: Class<T>) {
-    val expectedClassName = expectedClass.name
+internal fun <T : Any> ByteBuffer.assertClassName(expectedClass: KClass<T>) {
+    val expectedClassName = expectedClass.jvmName
     val actualClassName = readString()
 
     assert(expectedClassName == actualClassName) {
@@ -48,11 +50,11 @@ internal fun assertIntLength(actualLength: Int) {
     }
 }
 
-internal fun <T> assertFieldCount(
-    clazz: Class<T>,
+internal fun <T : Any> assertFieldCount(
+    kclass: KClass<T>,
     actualFieldCount: Int,
 ) {
-    val expectedFieldCount = clazz.serializedFields.size
+    val expectedFieldCount = kclass.serializedFields.size
     assert(expectedFieldCount == actualFieldCount) {
         "Field counts changed between class versions: expected $expectedFieldCount; got $actualFieldCount"
     }

@@ -1,7 +1,7 @@
 package hm.binkley.labs.cereal
 
 import java.nio.ByteBuffer
-import java.util.ServiceLoader
+import java.util.ServiceLoader.load
 
 interface Grain<T : Any> {
     fun consent(typeName: String): Boolean
@@ -15,7 +15,7 @@ internal fun <T : Any, U, R> U.serve(
     default: U.() -> R,
     match: Grain<T>.(U) -> R,
 ): R {
-    val grains = ServiceLoader.load(Grain::class.java).filter {
+    val grains = load(Grain::class.java).filter {
         it.consent(typeName)
     }.map {
         it as Grain<T>

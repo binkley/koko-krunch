@@ -5,10 +5,11 @@ import hm.binkley.labs.cereal.Prep
 import hm.binkley.labs.cereal.buf
 import java.math.BigInteger
 import java.nio.ByteBuffer
+import kotlin.reflect.jvm.jvmName
 
 class BigIntegerGrain : Grain<BigInteger> {
     override fun consent(typeName: String) =
-        BigInteger::class.java.name == typeName
+        BigInteger::class.jvmName == typeName
 
     override fun absorb(it: BigInteger): Prep =
         with(it.toByteArray()) { size to { it.put(this) } }

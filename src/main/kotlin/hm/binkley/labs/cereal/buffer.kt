@@ -1,6 +1,7 @@
 package hm.binkley.labs.cereal
 
 import java.nio.ByteBuffer
+import kotlin.reflect.KClass
 
 internal fun Iterable<Prep>.newBuffer() =
     ByteBuffer.allocate(MAGIC.length + 1 + map { it.allocateSize }.sum() + 1)
@@ -45,9 +46,9 @@ internal fun ByteArray.replaceAt(at: Int, bytes: ByteArray) {
 }
 
 /** @todo Syntactic sugar causes cancer of the semicolon */
-internal fun <T, R> Class<T>.readFrom(
+internal fun <T : Any, R> KClass<T>.readFrom(
     buf: ByteBuffer,
-    block: ByteBuffer.(Class<T>) -> R,
+    block: ByteBuffer.(KClass<T>) -> R,
 ): R = buf.block(this)
 
 internal fun ByteBuffer.readString() = ByteArray(int).let {

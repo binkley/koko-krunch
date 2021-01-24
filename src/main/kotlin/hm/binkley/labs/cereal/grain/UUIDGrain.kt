@@ -4,10 +4,11 @@ import hm.binkley.labs.cereal.Grain
 import hm.binkley.labs.cereal.Prep
 import java.nio.ByteBuffer
 import java.util.UUID
+import kotlin.reflect.jvm.jvmName
 
 class UUIDGrain : Grain<UUID> {
     override fun consent(typeName: String) =
-        UUID::class.java.name == typeName
+        UUID::class.jvmName == typeName
 
     override fun absorb(it: UUID): Prep =
         2 * Long.SIZE_BYTES to { buf ->

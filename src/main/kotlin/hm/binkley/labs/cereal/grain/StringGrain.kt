@@ -4,10 +4,11 @@ import hm.binkley.labs.cereal.Grain
 import hm.binkley.labs.cereal.Prep
 import hm.binkley.labs.cereal.buf
 import java.nio.ByteBuffer
+import kotlin.reflect.jvm.jvmName
 
 class StringGrain : Grain<String> {
     override fun consent(typeName: String) =
-        String::class.java.name == typeName
+        String::class.jvmName == typeName
 
     override fun absorb(it: String): Prep =
         with(it.toByteArray()) { size to { it.put(this) } }

@@ -3,19 +3,21 @@ package hm.binkley.labs.cereal
 import lombok.Generated
 import java.lang.reflect.Field
 import java.nio.ByteBuffer
+import kotlin.reflect.KClass
+import kotlin.reflect.jvm.jvmName
 
 const val MAGIC = "KOKO"
 const val VERSION = 0.toByte()
 
 internal const val NIL_VALUE = -1
 
-inline fun <reified T> ByteArray.read(): T = read(T::class.java)
+inline fun <reified T : Any> ByteArray.read(): T = read(T::class)
 
-fun <T> ByteArray.read(clazz: Class<T>): T = toByteBuffer()
+fun <T : Any> ByteArray.read(kclass: KClass<T>): T = toByteBuffer()
     .assertMetadata()
-    .assertEnoughData(clazz) {
-        val instance = clazz.readFrom(this) { blankInstance(it) }
-        for ((field, value) in clazz.readFrom(this) { fields(it) })
+    .assertEnoughData(kclass) {
+        val instance = kclass.readFrom(this) { blankInstance(it) }
+        for ((field, value) in kclass.readFrom(this) { fields(it) })
             field.set(instance, value)
 
         assertSentinel()
@@ -38,10 +40,10 @@ fun Any.write(): ByteArray {
 }
 
 private fun Any.classAndFieldPreps(): List<Prep> {
-    val fields = this::class.java.serializedFields.sortedBy { it.name }
+    val fields = this::class.serializedFields.sortedBy { it.name }
 
     val classPreps = listOf(
-        this::class.java.name,
+        this::class.jvmName,
         fields.size,
     ).map { it.study() }
 
@@ -52,7 +54,7 @@ private fun Any.classAndFieldPreps(): List<Prep> {
     return classPreps + fieldPreps
 }
 
-private fun <T> ByteBuffer.blankInstance(expectedClass: Class<T>) =
+private fun <T : Any> ByteBuffer.blankInstance(expectedClass: KClass<T>) =
     assertClassName(expectedClass).let {
         expectedClass.newBlankInstance()
     }
