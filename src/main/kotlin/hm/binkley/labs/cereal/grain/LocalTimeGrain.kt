@@ -8,7 +8,6 @@ import kotlin.reflect.KClass
 
 class LocalTimeGrain : Grain<LocalTime> {
     override fun consent(type: KClass<*>): Boolean = LocalTime::class == type
-
     override fun absorb(it: LocalTime): Prep =
         4 * Int.SIZE_BYTES to { buf ->
             buf.putInt(it.hour)

@@ -67,9 +67,6 @@ internal fun ByteBuffer.readInt() = int.let {
 
 internal fun <T : Any> ByteBuffer.readKClass() = readString().toKClass<T>()
 
-private fun <T : Any> String.toKClass() =
-    cast<Class<T>>(Class.forName(this)).kotlin
-
 internal fun <T : Any> ByteBuffer.readField(klass: KClass<T>) =
     readString().let { fieldName ->
         klass.getSerializedField(fieldName).also {
@@ -96,11 +93,14 @@ internal fun ByteBuffer.readValue(
     }
 }
 
+internal fun ByteBuffer.readSentinel() = byte
+
+private fun <T : Any> String.toKClass() =
+    cast<Class<T>>(Class.forName(this)).kotlin
+
 private fun <T : Any> ByteBuffer.serve(type: KClass<T>, len: Int) =
     serve<T, ByteBuffer, T>(
         type,
         { buf(len) { it.read(type) } },
         { extrude(it, len) }
     )
-
-internal fun ByteBuffer.readSentinel() = byte

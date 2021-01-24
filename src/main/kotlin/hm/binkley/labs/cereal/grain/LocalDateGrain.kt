@@ -8,7 +8,6 @@ import kotlin.reflect.KClass
 
 class LocalDateGrain : Grain<LocalDate> {
     override fun consent(type: KClass<*>): Boolean = LocalDate::class == type
-
     override fun absorb(it: LocalDate): Prep =
         3 * Int.SIZE_BYTES to { buf ->
             buf.putInt(it.year)

@@ -17,7 +17,7 @@ fun <T : Any> ByteArray.read(klass: KClass<T>): T = toByteBuffer()
     .assertMetadata()
     .assertEnoughData(klass) {
         val instance = klass.readFrom(this) { blankInstance(it) }
-        for ((field, value) in klass.readFrom(this) { fields(it) })
+        for ((field, value) in klass.readFrom(this) { readFields(it) })
             field.set(instance, value)
 
         assertSentinel()

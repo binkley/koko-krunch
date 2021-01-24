@@ -22,9 +22,6 @@ inline fun <T> cast(it: Any): T = it as T
 internal fun <T : Any> KClass<T>.newBlankInstance(): T =
     cast<T>(unsafe.allocateInstance(java))
 
-private val Field.isStatic get() = isStatic(modifiers)
-private val Field.isTransient get() = isTransient(modifiers)
-
 internal val KClass<*>.serializedFields: List<Field>
     get() {
         val fields = mutableListOf<Field>()
@@ -43,3 +40,6 @@ internal val KClass<*>.serializedFields: List<Field>
 internal fun KClass<*>.getSerializedField(name: String) =
     serializedFields.firstOrNull { name == it.name }
         ?: throw AssertionError("Bad field name: $name")
+
+private val Field.isStatic get() = isStatic(modifiers)
+private val Field.isTransient get() = isTransient(modifiers)

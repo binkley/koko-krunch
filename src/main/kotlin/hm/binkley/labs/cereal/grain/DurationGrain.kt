@@ -8,7 +8,6 @@ import kotlin.reflect.KClass
 
 class DurationGrain : Grain<Duration> {
     override fun consent(type: KClass<*>): Boolean = Duration::class == type
-
     override fun absorb(it: Duration): Prep =
         Long.SIZE_BYTES + Int.SIZE_BYTES to { buf ->
             buf.putLong(it.seconds)

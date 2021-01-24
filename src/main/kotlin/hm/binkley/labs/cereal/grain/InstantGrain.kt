@@ -10,7 +10,6 @@ import kotlin.reflect.KClass
 
 class InstantGrain : Grain<Instant> {
     override fun consent(type: KClass<*>): Boolean = Instant::class == type
-
     override fun absorb(it: Instant): Prep =
         (Long.SIZE_BYTES + Int.SIZE_BYTES) to { buf ->
             buf.putLong(it.getLong(INSTANT_SECONDS))
