@@ -44,7 +44,7 @@ private fun ByteArray.dump() {
     val magic = ByteArray(MAGIC.length)
     buf.get(magic)
     println("${String(magic)} ${buf.byte}")
-    println("${buf.readString()}:")
+    println(buf.readString())
     for (i in 0 until buf.readInt()) {
         val name = buf.readString()
         val type = buf.readString()
