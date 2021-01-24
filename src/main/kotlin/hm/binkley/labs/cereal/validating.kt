@@ -71,6 +71,6 @@ internal fun ByteBuffer.assertFieldTypeName(field: Field) {
 
 internal fun ByteBuffer.assertComplete() = assert(0 == remaining()) {
     "Extra bytes remaining after object read from buffer: ${
-        slice().array().pretty()
+    slice().array().pretty()
     } @ ${position() - 1}"
 }

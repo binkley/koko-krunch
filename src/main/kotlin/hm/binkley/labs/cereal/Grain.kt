@@ -9,7 +9,6 @@ interface Grain<T : Any> {
     fun extrude(buf: ByteBuffer, len: Int): T
 }
 
-@Suppress("UNCHECKED_CAST")
 internal fun <T : Any, U, R> U.serve(
     typeName: String,
     default: U.() -> R,
@@ -18,6 +17,7 @@ internal fun <T : Any, U, R> U.serve(
     val grains = load(Grain::class.java).filter {
         it.consent(typeName)
     }.map {
+        @Suppress("UNCHECKED_CAST")
         it as Grain<T>
     }
 

@@ -69,10 +69,13 @@ private fun ByteBuffer.readValue(
     }
 }
 
-@Suppress("UNCHECKED_CAST")
 private fun <T : Any> ByteBuffer.serve(typeName: String, len: Int) =
     serve<T, ByteBuffer, T>(
         typeName,
-        { buf(len) { it.read(Class.forName(typeName).kotlin) as T } },
+        { buf(len) { it.read(typeName.toKClass()) } },
         { extrude(it, len) }
     )
+
+@Suppress("UNCHECKED_CAST")
+private fun <T : Any> String.toKClass() =
+    (Class.forName(this) as Class<T>).kotlin
