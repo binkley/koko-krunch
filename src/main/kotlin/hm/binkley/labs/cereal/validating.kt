@@ -29,7 +29,7 @@ internal fun <T : Any> ByteBuffer.assertEnoughData(
     throw AssertionError("Missing bytes: possibly truncated or corrupted, or class version changed")
 }
 
-internal fun ByteBuffer.assertSentinel() = byte.also {
+internal fun ByteBuffer.assertSentinel() = readSentinel().also {
     assert(0.toByte() == it) {
         "Corrupted sentinel byte: ${it.pretty()} @ ${position() - 1}"
     }
@@ -71,6 +71,6 @@ internal fun ByteBuffer.assertFieldTypeName(field: Field) {
 
 internal fun ByteBuffer.assertComplete() = assert(0 == remaining()) {
     "Extra bytes remaining after object read from buffer: ${
-    slice().array().pretty()
+        slice().array().pretty()
     } @ ${position() - 1}"
 }

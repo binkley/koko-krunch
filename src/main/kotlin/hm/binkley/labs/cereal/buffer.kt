@@ -63,3 +63,5 @@ internal fun ByteBuffer.readInt() = int.let {
         assertSentinel()
     }
 }
+
+internal fun ByteBuffer.readSentinel() = byte
