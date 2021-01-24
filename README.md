@@ -63,7 +63,8 @@ Koko Krunch lays out serialized byte buffers thusly:
 6. The records are in sequence of:
     1. A string data record of the FQN class name of the serialized object.
     2. a 4-byte (32-bit integer) count of the number of subsequent records.
-    3. A sequence of records for each non-static, non-transient field.
+    3. A sequence of records for each non-static, non-transient field, in
+       ASCII order by field name.
 7. A field sequence is a triple or duple:
     1. A record for the field name.
     2. A record for the FQN field type name.
@@ -83,6 +84,11 @@ Koko Krunch lays out serialized byte buffers thusly:
 
 - [`inline fun <reified T> ByteArray.read(): T`](src/main/kotlin/hm/binkley/labs/cereal/Cereal.kt)
 - [`fun <T> ByteArray.read(clazz: Class<T>): T`](src/main/kotlin/hm/binkley/labs/cereal/Cereal.kt)
+
+## Custom serialization
+
+1. Implement [`Grain`](src/main/kotlin/hm/binkley/labs/cereal/Grain.kt)
+2. Register the implementation with JDK's `ServiceLoader`
 
 ---
 
