@@ -2,7 +2,8 @@ package hm.binkley.labs.cereal
 
 import sun.misc.Unsafe
 import java.lang.reflect.Field
-import java.lang.reflect.Modifier
+import java.lang.reflect.Modifier.isStatic
+import java.lang.reflect.Modifier.isTransient
 import kotlin.reflect.KClass
 
 private val unsafe = Unsafe::class.java.getDeclaredField("theUnsafe").apply {
@@ -14,8 +15,8 @@ private val unsafe = Unsafe::class.java.getDeclaredField("theUnsafe").apply {
 internal fun <T : Any> KClass<T>.newBlankInstance(): T =
     unsafe.allocateInstance(java) as T
 
-private val Field.isStatic get() = Modifier.isStatic(modifiers)
-private val Field.isTransient get() = Modifier.isTransient(modifiers)
+private val Field.isStatic get() = isStatic(modifiers)
+private val Field.isTransient get() = isTransient(modifiers)
 
 internal val KClass<*>.serializedFields: List<Field>
     get() {
@@ -32,18 +33,6 @@ internal val KClass<*>.serializedFields: List<Field>
         return fields.onEach { it.isAccessible = true }
     }
 
-internal fun KClass<*>.getSerializedField(name: String): Field {
-    var clazz: Class<*>? = this.java
-    while (null != clazz && Object::class.java != clazz) return try {
-        val field = clazz.getDeclaredField(name)
-        if (field.isStatic || field.isTransient) continue
-        field.isAccessible = true
-        field
-    } catch (e: NoSuchFieldException) {
-        continue
-    } finally {
-        clazz = clazz.superclass
-    }
-
-    throw AssertionError("Bad field name: $name")
-}
+internal fun KClass<*>.getSerializedField(name: String) =
+    serializedFields.firstOrNull { name == it.name }
+        ?: throw AssertionError("Bad field name: $name")
