@@ -3,40 +3,29 @@ package hm.binkley.labs.cereal.grain
 import hm.binkley.labs.cereal.Grain
 import hm.binkley.labs.cereal.Prep
 import java.nio.ByteBuffer
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.LocalTime
 import kotlin.reflect.KClass
+
+private val dateGrain = LocalDateGrain()
+private val timeGrain = LocalTimeGrain()
 
 class LocalDateTimeGrain : Grain<LocalDateTime> {
     override fun consent(type: KClass<*>): Boolean =
         LocalDateTime::class == type
 
-    override fun absorb(it: LocalDateTime): Prep =
-        7 * Int.SIZE_BYTES to { buf ->
-            val date = it.toLocalDate()
-            buf.putInt(date.year)
-            buf.putInt(date.monthValue)
-            buf.putInt(date.dayOfMonth)
-            val time = it.toLocalTime()
-            buf.putInt(time.hour)
-            buf.putInt(time.minute)
-            buf.putInt(time.second)
-            buf.putInt(time.nano)
+    override fun absorb(it: LocalDateTime): Prep {
+        val date = dateGrain.absorb(it.toLocalDate())
+        val time = timeGrain.absorb(it.toLocalTime())
+
+        return (date.first + time.first) to { buf ->
+            date.second(buf)
+            time.second(buf)
         }
+    }
 
     override fun extrude(buf: ByteBuffer, len: Int): LocalDateTime =
         LocalDateTime.of(
-            LocalDate.of(
-                buf.int,
-                buf.int,
-                buf.int
-            ),
-            LocalTime.of(
-                buf.int,
-                buf.int,
-                buf.int,
-                buf.int
-            )
+            dateGrain.extrude(buf, len),
+            timeGrain.extrude(buf, len)
         )
 }

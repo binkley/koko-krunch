@@ -1,6 +1,8 @@
 hm.binkley.labs.cereal.grain.BigIntegerGrain
 hm.binkley.labs.cereal.grain.DurationGrain
 hm.binkley.labs.cereal.grain.InstantGrain
+hm.binkley.labs.cereal.grain.LocalDateGrain
 hm.binkley.labs.cereal.grain.LocalDateTimeGrain
+hm.binkley.labs.cereal.grain.LocalTimeGrain
 hm.binkley.labs.cereal.grain.StringGrain
 hm.binkley.labs.cereal.grain.UUIDGrain
