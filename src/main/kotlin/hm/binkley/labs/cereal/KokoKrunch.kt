@@ -53,47 +53,86 @@ internal class KokoKrunch(
     val transient: Long = 0,
     beans: Int,
 ) : Chocolate(beans) {
+    fun copy(
+        `how long`: Duration = this.`how long`,
+        `when`: LocalDateTime = this.`when`,
+        beans: Int = this.beans,
+        bint: BigInteger = this.bint,
+        bool: Boolean = this.bool,
+        byte: Byte = this.byte,
+        ch: Char = this.ch,
+        crunch: Crunch = this.crunch,
+        d: Double = this.d,
+        drool: Boolean = this.drool,
+        f: Float = this.f,
+        long: Long = this.long,
+        now: Instant = this.now,
+        optional: String? = this.optional,
+        required: String = this.required,
+        s: Short = this.s,
+        uuid: UUID = this.uuid,
+        z: Int = this.z,
+    ) = KokoKrunch(
+        `how long` = `how long`,
+        `when` = `when`,
+        beans = beans,
+        bint = bint,
+        bool = bool,
+        byte = byte,
+        ch = ch,
+        crunch = crunch,
+        d = d,
+        drool = drool,
+        f = f,
+        long = long,
+        now = now,
+        optional = optional,
+        required = required,
+        s = s,
+        uuid = uuid,
+        z = z,
+    )
+
     override fun equals(other: Any?) = this === other ||
         other is KokoKrunch &&
-        javaClass == other.javaClass &&
-        beans == other.beans &&
-        bint == other.bint &&
-        required == other.required &&
-        optional == other.optional &&
-        byte == other.byte &&
-        s == other.s &&
-        ch == other.ch &&
-        long == other.long &&
-        bool == other.bool &&
-        drool == other.drool &&
-        d == other.d &&
-        f == other.f &&
-        z == other.z &&
-        crunch == other.crunch &&
-        uuid == other.uuid &&
-        now == other.now &&
+        super.equals(other) &&
         `how long` == other.`how long` &&
-        `when` == other.`when`
+        `when` == other.`when` &&
+        bint == other.bint &&
+        bool == other.bool &&
+        byte == other.byte &&
+        ch == other.ch &&
+        crunch == other.crunch &&
+        d == other.d &&
+        drool == other.drool &&
+        f == other.f &&
+        long == other.long &&
+        now == other.now &&
+        optional == other.optional &&
+        required == other.required &&
+        s == other.s &&
+        uuid == other.uuid &&
+        z == other.z
 
     override fun hashCode() =
-        hash(
-            bint,
-            required,
-            optional,
-            byte,
-            s,
-            ch,
-            long,
-            bool,
-            drool,
-            d,
-            f,
-            z,
-            crunch,
-            uuid,
-            now,
+        31 * super.hashCode() + hash(
             `how long`,
             `when`,
+            bint,
+            bool,
+            byte,
+            ch,
+            crunch,
+            d,
+            drool,
+            f,
+            long,
+            now,
+            optional,
+            required,
+            s,
+            uuid,
+            z,
         )
 
     override fun toString() =
