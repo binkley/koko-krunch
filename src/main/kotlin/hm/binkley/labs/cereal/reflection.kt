@@ -39,7 +39,7 @@ internal val KClass<*>.serializedFields: List<Field>
 /** @todo Save this off; don't rescan class fields each call */
 internal fun KClass<*>.getSerializedField(name: String) =
     serializedFields.firstOrNull { name == it.name }
-        ?: throw SerialException("Bad field name: $name")
+        ?: throw CerealException("Bad field name: $name")
 
 private val Field.isStatic get() = isStatic(modifiers)
 private val Field.isTransient get() = isTransient(modifiers)

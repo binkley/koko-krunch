@@ -17,7 +17,7 @@ internal class CerealTest {
 
     @Test
     fun `should complain about too little data`() {
-        shouldThrowExactly<SerialException> {
+        shouldThrowExactly<CerealException> {
             ByteArray(0).read<KokoKrunch>()
         }
     }
@@ -28,7 +28,7 @@ internal class CerealTest {
             replaceAt(0, MAGIC.replace(MAGIC[0], MAGIC[0] - 1).toByteArray())
         }
 
-        shouldThrowExactly<SerialException> {
+        shouldThrowExactly<CerealException> {
             bytes.read<KokoKrunch>()
         }
     }
@@ -39,7 +39,7 @@ internal class CerealTest {
             this[4] = (VERSION + 1).toByte()
         }
 
-        shouldThrowExactly<SerialException> {
+        shouldThrowExactly<CerealException> {
             bytes.read<KokoKrunch>()
         }
     }
@@ -50,7 +50,7 @@ internal class CerealTest {
             this[size - 1] = 1.toByte()
         }
 
-        shouldThrowExactly<SerialException> {
+        shouldThrowExactly<CerealException> {
             bytes.read<KokoKrunch>()
         }
     }
@@ -62,7 +62,7 @@ internal class CerealTest {
             replaceAt(i, "JojoBrunch".toByteArray())
         }
 
-        shouldThrowExactly<SerialException> {
+        shouldThrowExactly<CerealException> {
             bytes.read<KokoKrunch>()
         }
     }
@@ -73,7 +73,7 @@ internal class CerealTest {
             this[indexOf(4.toByte())] = 3.toByte()
         }
 
-        shouldThrowExactly<SerialException> {
+        shouldThrowExactly<CerealException> {
             bytes.read<KokoKrunch>()
         }
     }
@@ -86,7 +86,7 @@ internal class CerealTest {
             this[indexOf(count.toByte())] = (count - 1).toByte()
         }
 
-        shouldThrowExactly<SerialException> {
+        shouldThrowExactly<CerealException> {
             bytes.read<KokoKrunch>()
         }
     }
@@ -100,7 +100,7 @@ internal class CerealTest {
             truncated
         }
 
-        shouldThrowExactly<SerialException> {
+        shouldThrowExactly<CerealException> {
             bytes.read<KokoKrunch>()
         }
     }
@@ -112,7 +112,7 @@ internal class CerealTest {
             replaceAt(i, "church".toByteArray())
         }
 
-        shouldThrowExactly<SerialException> {
+        shouldThrowExactly<CerealException> {
             bytes.read<KokoKrunch>()
         }
     }
@@ -124,7 +124,7 @@ internal class CerealTest {
             replaceAt(i, "long".toByteArray())
         }
 
-        shouldThrowExactly<SerialException> {
+        shouldThrowExactly<CerealException> {
             bytes.read<KokoKrunch>()
         }
     }
@@ -136,7 +136,7 @@ internal class CerealTest {
             this[i + 1] = 'z'.toByte()
         }
 
-        shouldThrowExactly<SerialException> {
+        shouldThrowExactly<CerealException> {
             bytes.read<KokoKrunch>()
         }
     }
@@ -147,7 +147,7 @@ internal class CerealTest {
             copyOf(size + 1)
         }
 
-        shouldThrowExactly<SerialException> {
+        shouldThrowExactly<CerealException> {
             bytes.read<KokoKrunch>()
         }
     }
