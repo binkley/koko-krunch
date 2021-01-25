@@ -11,6 +11,8 @@ const val VERSION: Byte = 0.toByte()
 
 internal const val NIL_VALUE = -1
 
+class SerialException(message: String) : Exception(message)
+
 inline fun <reified T : Any> ByteArray.read(): T = read(T::class)
 
 fun <T : Any> ByteArray.read(klass: KClass<T>): T = toByteBuffer()

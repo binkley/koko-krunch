@@ -9,15 +9,15 @@ import kotlin.reflect.jvm.jvmName
 /** @todo Syntactic sugar causes cancer of the semicolon */
 internal fun ByteBuffer.assertMetadata() = try {
     MAGIC.forEach {
-        if (it.toByte() != byte) throw AssertionError("Not $MAGIC data")
+        if (it.toByte() != byte) throw SerialException("Not $MAGIC data")
     }
 
     val version = byte
-    if (VERSION != version) throw AssertionError("Wrong $MAGIC version: expected $VERSION; got $version")
+    if (VERSION != version) throw SerialException("Wrong $MAGIC version: expected $VERSION; got $version")
 
     this
 } catch (e: BufferUnderflowException) {
-    throw AssertionError("Missing bytes: possibly truncated or corrupted, or class version changed")
+    throw SerialException("Missing bytes: possibly truncated or corrupted, or class version changed")
 }
 
 internal fun <T : Any> ByteBuffer.assertEnoughData(
@@ -26,12 +26,12 @@ internal fun <T : Any> ByteBuffer.assertEnoughData(
 ) = try {
     this.block(klass)
 } catch (e: BufferUnderflowException) {
-    throw AssertionError("Missing bytes: possibly truncated or corrupted, or class version changed")
+    throw SerialException("Missing bytes: possibly truncated or corrupted, or class version changed")
 }
 
 internal fun ByteBuffer.assertSentinel() = readSentinel().also {
     if (0.toByte() != it) {
-        throw AssertionError("Corrupted sentinel byte: ${it.pretty()} @ ${position() - 1}")
+        throw SerialException("Corrupted sentinel byte: ${it.pretty()} @ ${position() - 1}")
     }
 }
 
@@ -40,13 +40,13 @@ internal fun <T : Any> ByteBuffer.assertClassName(expectedClass: KClass<T>) {
     val actualClassName = readString()
 
     if (expectedClassName != actualClassName) {
-        throw AssertionError("Wrong class: expected '$expectedClassName'; got '$actualClassName'")
+        throw SerialException("Wrong class: expected '$expectedClassName'; got '$actualClassName'")
     }
 }
 
 internal fun assertIntLength(actualLength: Int) {
     if (Int.SIZE_BYTES != actualLength) {
-        throw AssertionError("Expected int to be ${Int.SIZE_BYTES} bytes, not $actualLength")
+        throw SerialException("Expected int to be ${Int.SIZE_BYTES} bytes, not $actualLength")
     }
 }
 
@@ -56,7 +56,7 @@ internal fun <T : Any> assertFieldCount(
 ) {
     val expectedFieldCount = klass.serializedFields.size
     if (expectedFieldCount != actualFieldCount) {
-        throw AssertionError("Field counts changed between class versions: expected $expectedFieldCount; got $actualFieldCount")
+        throw SerialException("Field counts changed between class versions: expected $expectedFieldCount; got $actualFieldCount")
     }
 }
 
@@ -65,13 +65,13 @@ internal fun ByteBuffer.assertFieldTypeName(field: Field) {
     val actualFieldTypeName = readString()
     if (expectedFieldTypeName != actualFieldTypeName) {
         // TODO: Why are expected/actual flipped?
-        throw AssertionError("Field type changed between class versions: expected '$expectedFieldTypeName'; got '$actualFieldTypeName'")
+        throw SerialException("Field type changed between class versions: expected '$expectedFieldTypeName'; got '$actualFieldTypeName'")
     }
 }
 
 internal fun ByteBuffer.assertComplete() {
     if (0 != remaining()) {
-        throw AssertionError(
+        throw SerialException(
             "Extra bytes remaining after object read from buffer: ${
             slice().array().pretty()
             } @ ${position() - 1}"
