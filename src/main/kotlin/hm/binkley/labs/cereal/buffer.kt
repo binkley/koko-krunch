@@ -100,7 +100,7 @@ private fun <T : Any> String.toKClass() =
 
 private fun <T : Any> ByteBuffer.serve(type: KClass<T>, len: Int) =
     serve<T, ByteBuffer, T>(
-        type,
-        { buf(len) { it.read(type) } },
-        { extrude(it, len) }
+        type = type,
+        default = { buf(len) { it.read(type) } },
+        match = { extrude(it, len) }
     )

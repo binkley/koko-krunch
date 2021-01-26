@@ -30,7 +30,7 @@ internal fun Any?.study(): Prep = when (this) {
 
 private fun <T : Any> T.serve(type: KClass<*>) =
     serve<T, T, Prep>(
-        type,
-        { with(write()) { size to { it.put(this) } } },
-        { absorb(it) }
+        type = type,
+        default = { with(write()) { size to { it.put(this) } } },
+        match = { absorb(it) }
     )
