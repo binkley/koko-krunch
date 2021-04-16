@@ -133,7 +133,7 @@ internal class CerealTest {
     fun `should complain about bad field type`() {
         val bytes = fixture.write().apply {
             val i = indexOf("byte".toByteArray())
-            this[i + 1] = 'z'.toByte()
+            this[i + 1] = 'z'.code.toByte()
         }
 
         shouldThrowExactly<CerealException> {

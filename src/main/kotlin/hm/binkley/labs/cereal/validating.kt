@@ -9,7 +9,8 @@ import kotlin.reflect.jvm.jvmName
 /** @todo Syntactic sugar causes cancer of the semicolon */
 internal fun ByteBuffer.assertMetadata() = try {
     MAGIC.forEach {
-        if (it.toByte() != byte) throw CerealException("Not $MAGIC data")
+        // NB -- "MAGIC" is all ASCII, no multibyte characters
+        if (it.code.toByte() != byte) throw CerealException("Not $MAGIC data")
     }
 
     val version = byte

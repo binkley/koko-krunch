@@ -6,6 +6,7 @@ import java.nio.ByteBuffer
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.jvmName
 
+// NB -- "MAGIC" is all ASCII, no multibyte characters
 const val MAGIC: String = "KOKO"
 const val VERSION: Byte = 0.toByte()
 
@@ -32,7 +33,8 @@ fun Any.write(): ByteArray {
     val preps = classAndFieldPreps()
     val buf = preps.newBuffer()
 
-    MAGIC.forEach { buf.putByte(it.toByte()) }
+    // NB -- "MAGIC" is all ASCII, no multibyte characters
+    MAGIC.forEach { buf.putByte(it.code.toByte()) }
     buf.putByte(VERSION)
 
     preps.forEach { it.writeTo(buf) }
