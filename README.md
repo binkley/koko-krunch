@@ -12,7 +12,7 @@ width="20%"/>
 
 [![build](https://github.com/binkley/koko-krunch/workflows/build/badge.svg)](https://github.com/binkley/koko-krunch/actions)
 [![issues](https://img.shields.io/github/issues/binkley/koko-krunch.svg)](https://github.com/binkley/koko-krunch/issues/)
-[![Public Domain](https://img.shields.io/badge/license-Public%20Domain-blue.svg)](http://unlicense.org/)
+[![license](https://img.shields.io/badge/license-Public%20Domain-blue.svg)](http://unlicense.org/)
 
 * [Build and try](#build-and-try)
 * [Format](#format)
