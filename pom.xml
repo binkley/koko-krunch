@@ -22,6 +22,9 @@
     <properties>
         <!-- @formatter:off -->
         <buildplan-maven-plugin.version>1.5</buildplan-maven-plugin.version>
+        <coverage.branches>100</coverage.branches>
+        <coverage.lines>100</coverage.lines>
+        <coverage.instructions>100</coverage.instructions>
         <dependency-check-maven.version>7.1.0</dependency-check-maven.version>
         <detekt-maven-plugin.version>1.20.0</detekt-maven-plugin.version>
         <failIfNoTests>true</failIfNoTests>
@@ -280,12 +283,21 @@
                         <configuration>
                             <rules>
                                 <rule>
-                                    <element>BUNDLE</element>
                                     <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${coverage.lines}%</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>BRANCH</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${coverage.branches}%</minimum>
+                                        </limit>
                                         <limit>
                                             <counter>INSTRUCTION</counter>
                                             <value>COVEREDRATIO</value>
-                                            <minimum>100%</minimum>
+                                            <minimum>${coverage.instructions}%</minimum>
                                         </limit>
                                     </limits>
                                 </rule>
@@ -294,6 +306,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- TODO: Pitest is grossly unhappy in the face of reflection -->
             <plugin>
                 <groupId>com.github.gantsign.maven</groupId>
                 <artifactId>ktlint-maven-plugin</artifactId>
