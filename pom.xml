@@ -25,18 +25,18 @@
         <coverage.branches>100</coverage.branches>
         <coverage.lines>100</coverage.lines>
         <coverage.instructions>100</coverage.instructions>
-        <dependency-check-maven.version>7.1.1</dependency-check-maven.version>
-        <detekt-maven-plugin.version>1.21.0</detekt-maven-plugin.version>
+        <dependency-check-maven.version>7.3.2</dependency-check-maven.version>
+        <detekt-maven-plugin.version>1.22.0</detekt-maven-plugin.version>
         <failIfNoTests>true</failIfNoTests>
         <failsafe.printSummary>false</failsafe.printSummary>
         <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
         <java.charset>UTF-8</java.charset>
         <jdk.version>17</jdk.version>
-        <junit.version>5.9.0</junit.version>
-        <kotest.version>5.4.1</kotest.version>
+        <junit.version>5.9.1</junit.version>
+        <kotest.version>5.5.4</kotest.version>
         <kotlin.code.style>official</kotlin.code.style>
-        <kotlin.version>1.7.10</kotlin.version>
-        <ktlint-maven-plugin.version>1.13.1</ktlint-maven-plugin.version>
+        <kotlin.version>1.7.22</kotlin.version>
+        <ktlint-maven-plugin.version>1.15.2</ktlint-maven-plugin.version>
         <lombok.version>1.18.24</lombok.version>
         <main.class>hm.binkley.labs.cereal.MainKt</main.class>
         <maven-assembly-plugin.version>3.4.2</maven-assembly-plugin.version>
@@ -44,7 +44,7 @@
         <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
         <maven-dependency-plugin.version>3.3.0</maven-dependency-plugin.version>
         <maven-help-plugin.version>3.2.0</maven-help-plugin.version>
-        <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>
+        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
         <owasp.skip>false</owasp.skip>
         <maven-testing-plugins.version>3.0.0-M6</maven-testing-plugins.version>
         <maven.test.skip>false</maven.test.skip>
@@ -52,7 +52,7 @@
         <project.reporting.outputEncoding>${java.charset}</project.reporting.outputEncoding>
         <system-lambda.version>1.2.1</system-lambda.version>
         <surefire.printSummary>false</surefire.printSummary>
-        <versions-maven-plugin.version>2.11.0</versions-maven-plugin.version>
+        <versions-maven-plugin.version>2.13.0</versions-maven-plugin.version>
         <!-- @formatter:on -->
     </properties>
 
@@ -203,6 +203,10 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
                 <executions>
                     <!-- Replacing default-compile as it is treated specially by maven -->
                     <execution>
@@ -306,7 +310,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- TODO: Pitest is grossly unhappy in the face of reflection -->
             <plugin>
                 <groupId>com.github.gantsign.maven</groupId>
                 <artifactId>ktlint-maven-plugin</artifactId>
@@ -317,11 +320,20 @@
                 <executions>
                     <execution>
                         <goals>
+                            <!-- TODO: Reenable
                             <goal>format</goal>
                             <goal>check</goal>
+                            -->
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-compiler-embeddable</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>com.github.ozsie</groupId>
@@ -358,14 +370,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>9</source>
-                    <target>9</target>
-                </configuration>
             </plugin>
         </plugins>
     </build>
